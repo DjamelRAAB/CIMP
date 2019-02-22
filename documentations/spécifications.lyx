@@ -120,11 +120,6 @@ Le système doit être capable de transférer une image vers une fenêtre déjà
 \end_layout
 
 \begin_layout Enumerate
-Le sytème doit supporter les formats d'images suivant: png,bmp, png ...
- etc.
-\end_layout
-
-\begin_layout Enumerate
 L'application doit permettre la sauvegarde d'une image.
  
 \end_layout
@@ -142,7 +137,7 @@ Selection de régions
 \end_layout
 
 \begin_layout Enumerate
-Le système doit permettre de selectionner une image entière ou une partie
+Le système doit permettre de selectionner une image entière ou une région
  de cette image.
 \end_layout
 
@@ -156,7 +151,7 @@ Le système doit permettre de désélectionner une zone.
 
 \begin_layout Enumerate
 Le système doit permettre de modifier les pixels de l'image ou d'une de
- ces parties.
+ ces régions.
  
 \end_layout
 
@@ -184,7 +179,7 @@ Le système doit permettre de couper une région d'image.
 
 \begin_layout Enumerate
 Le système doit permettre de remplacer la zone coupée par une couleur de
- fond choisit par l'utilisateur.
+ fond par défaut ou bien choisit par l'utilisateur.
 \end_layout
 
 \begin_layout Enumerate
@@ -199,6 +194,73 @@ Transformations
 \begin_layout Enumerate
 Le système doit permettre la symetrie d'une image sur le plan vertical ou
  horizontal.
+\end_layout
+
+\begin_layout Enumerate
+Le système doit permettre la rotation de l'image par un mutiple de 90°.
+\end_layout
+
+\begin_layout Enumerate
+Le système doit permettre le recadrage de l'image par différente méthodes:
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+Par découpage rectangulaire (Perte des pixels en dehors du rectangles de
+ recadrage).
+\end_layout
+
+\begin_layout Enumerate
+Par agrandissement de la zone de travail (Ajout d'une marge autour des pixels
+ d'origines, colorée en une couleur de fond).
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+Le système doit permettre la modifications de la taille de l'image.
+\end_layout
+
+\begin_layout Enumerate
+Le système doit permettre le remplissage d'une image ou de la sélection
+ courante par une couleur donnée.
+\end_layout
+
+\begin_layout Enumerate
+Le système doit permettre le remplacement de couleur, avec ou sans marge
+ de tolérance.
+\end_layout
+
+\begin_layout Enumerate
+Le système doit permettre la mise en négatif d'une image ou de la sélection
+ courante.
+\end_layout
+
+\begin_layout Enumerate
+Le système doit permettre la mise en niveaux grix d'une image ou de la sélection
+ courante.
+\end_layout
+
+\begin_layout Enumerate
+Le système doit permettre la mise en noir et blanc d'une image ou de la
+ sélection courante.
+\end_layout
+
+\begin_layout Enumerate
+Le système doit permettre l'ajustement de la luminosité et du contraste
+ d'une image ou de la sélection courante.
+\end_layout
+
+\begin_layout Subsection
+Spécifications des extensions
+\end_layout
+
+\begin_layout Subsubsection
+Traitements par lots
+\end_layout
+
+\begin_layout Enumerate
+Le systéme doit être capable d'appliquer le traitement à un fichier d'images
+ externes.
 \end_layout
 
 \begin_layout Section
@@ -221,7 +283,12 @@ t dans celles-ci, ainsi que la capture des événements sur celles-ci.
 
 \begin_layout Enumerate
 le système doit permettre l'accès aux fonctionnalités à l'aide de la ligne
- de commande (CLI) 
+ de commande (CLI).
+\end_layout
+
+\begin_layout Enumerate
+Le sytème doit supporter les formats d'images suivant: png,bmp, png ...
+ etc.
 \end_layout
 
 \end_body
