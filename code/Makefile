@@ -1,5 +1,5 @@
 all:
-	gcc -Wall -Wextra -L./lib -I./include -lSDL2-2.0 src/main.c -o main
+	gcc -Wall -Wextra src/main.c -o main -L./lib -I./include -lSDL2-2.0
 
 run:
 	LIBGL_DEBUG=verbose LD_LIBRARY_PATH=./lib ./main
