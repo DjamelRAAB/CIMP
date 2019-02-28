@@ -3,30 +3,58 @@
 #include <SDL2/SDL.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
+#include "shared.h"
 
-int main(int argc, char *argv[])
-{
-    SDL_Window *window = NULL;
-    int statut = EXIT_FAILURE;
 
-    if(0 != SDL_Init(SDL_INIT_VIDEO))
-    {
-        fprintf(stderr, "Erreur SDL_Init : %s", SDL_GetError());
-        goto Quit;
-    }
-    window = SDL_CreateWindow("SDL2", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,640, 480, SDL_WINDOW_RESIZABLE | SDL_WINDOW_BORDERLESS);
-    if(NULL == window)
-    {
-        fprintf(stderr, "Erreur SDL_CreateWindow : %s", SDL_GetError());
-        goto Quit;
-    }
-    SDL_RestoreWindow(window);
+/**
+ *@const w La largeur de la fenétre 
+ *@const w La hauteur de la fenétre 
+ **/
 
-     
-    statut = EXIT_SUCCESS;
-    SDL_Delay(10000);
+#define w 640
+#define h 480
+
+int main(void){
+
+  SDL_Window *window = NULL;
+  SDL_Renderer *renderer = NULL;
+  SDL_Texture *texture_image = NULL;
+
+  int statut = EXIT_FAILURE;
+  
+ 
+  if(init(&window, &renderer, w, h) != 0){
+    fprintf(stderr, "Erreur SDL_CreateWindow or SDL_CreateRenderer : %s", SDL_GetError());
+    goto Quit;
+  }
+  
+  texture_image = loadImage("./asserts/katoche.bmp", renderer);
+  
+  if(texture_image == NULL){
+    fprintf(stderr, "Erreur loadImage : %s", SDL_GetError());
+    goto Quit;
+    
+  }
+  SDL_RenderCopy(renderer, texture_image, NULL, NULL);
+
+  SDL_RenderPresent(renderer);
+  
+  statut = EXIT_SUCCESS;
+  
+  SDL_Delay(10000);
+ Quit :
+  
+  if(texture_image != NULL)
+    SDL_DestroyRenderer(renderer);
+  
+  if(renderer !=NULL )
+    SDL_DestroyRenderer(renderer);
+  
+  if(window !=NULL)
     SDL_DestroyWindow(window);
-Quit:
-    SDL_Quit();
-    return statut;
+  
+  SDL_Quit();
+  return statut;
 }
+ 
