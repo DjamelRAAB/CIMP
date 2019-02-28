@@ -2,8 +2,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#ifndef __GRAPH__H__
-#define __GRAPH__H__
+#ifndef __SHARED__H__
+#define __SHARED__H__
 
 	/* Définition d'une fonction qui modifie la coleur du renderer */
 
