@@ -58,8 +58,9 @@ SDL_Texture *loadImage(const char path[], SDL_Renderer *renderer){
    * dessiner sur cette derniere
    */
   SDL_RenderCopy(renderer, texture, NULL, NULL);
+  SDL_DestroyTexture(texture);
   SDL_SetRenderTarget(renderer, NULL);
-
+  
   return texture_enable;
 
 }

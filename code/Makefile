@@ -1,5 +1,5 @@
 all:
-	gcc -Wall -Wextra src/main.c src/shared/shared.c src/minimal/load_image.c -o main -L./lib -I./include -lSDL2-2.0 -lSDL2_image
+	gcc -Wall -Wextra src/main.c src/shared/shared.c src/minimal/load_image.c src/minimal/save_image.c -o main -L./lib -I./include -lSDL2-2.0 -lSDL2_image
 
 run:
 	LIBGL_DEBUG=verbose LD_LIBRARY_PATH=./lib ./main

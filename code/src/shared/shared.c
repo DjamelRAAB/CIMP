@@ -11,7 +11,7 @@
  * @return return 0 si tout se passe bien -1 si non
  **/
 int init(SDL_Window **window, SDL_Renderer **renderer, int w, int h){
-  if(SDL_Init(SDL_INIT_VIDEO != 0)){
+  if(SDL_Init(SDL_INIT_VIDEO|SDL_INIT_EVENTS )!=0){
     fprintf(stderr, "Erreur SDL_Init : %s", SDL_GetError());
     return -1;
   }

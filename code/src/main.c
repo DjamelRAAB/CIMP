@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include "shared.h"
+#include "save_image.h"
 
 
 
@@ -41,17 +42,25 @@ int main(void){
     goto Quit;
     
   }
+  
   SDL_RenderCopy(renderer, texture_image, NULL, NULL);
+
 
   SDL_RenderPresent(renderer);
   
   statut = EXIT_SUCCESS;
   
   SDL_Delay(10000);
+
+  if(saveImage(window,renderer, "motoDa","png")!=0){
+    fprintf(stderr, "Erreur loadImage : %s", SDL_GetError());
+    goto Quit;
+  }
+
  Quit :
   
   if(texture_image != NULL)
-    SDL_DestroyRenderer(renderer);
+    SDL_DestroyTexture(texture_image);
   
   if(renderer !=NULL )
     SDL_DestroyRenderer(renderer);
