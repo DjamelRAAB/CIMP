@@ -57,7 +57,7 @@ int main(void){
 
   SDL_Rect rect = selectRect ();
   SDL_Color c = {25, 120 ,90 ,105};
-  enum Processing act = GREY ;
+  enum Processing act = ZOOM ;
   imageProcessing (renderer , &rect , c , act);
   SDL_Delay(1000);
 

@@ -68,6 +68,8 @@ Uint32 flouPixel(Uint32 * pixels, SDL_Rect *rect ,int i, int j, int n){
 int imageProcessing (SDL_Renderer *renderer , SDL_Rect *rect , SDL_Color c , enum Processing act){
   int i , j ,n = 2;
   int pitch ;
+  double angle ;
+  SDL_RendererFlip flip ;
   Uint32 *pixels; 
   Uint32 *pixels2; 
   SDL_Texture *texture ; 
@@ -181,7 +183,27 @@ int imageProcessing (SDL_Renderer *renderer , SDL_Rect *rect , SDL_Color c , enu
       }
     }
     break;                              
-    
+ //   LEFT_ROTATION , RIGHT_ROTATION , ZOOM, FLIP_HORIZONTAL, FLIP_HORIZONTAL
+  case LEFT_ROTATION:
+    angle = 90;
+    flip = SDL_FLIP_NONE;
+    break;
+  case RIGHT_ROTATION:
+    angle = -90;
+    flip = SDL_FLIP_NONE;
+    break;
+  case FLIP_HORIZONTAL: 
+    angle = 0; 
+    flip = SDL_FLIP_HORIZONTAL;
+    break;
+  case FLIP_VERTICAL:
+    angle = 0;
+    flip = SDL_FLIP_VERTICAL;
+    break;
+  case ZOOM :
+    angle = 0 ;
+    flip = SDL_FLIP_NONE;
+    break;
   default:
     printf("Aucun traitement disponible pour l'act demander!");
     return 1; 
@@ -189,11 +211,27 @@ int imageProcessing (SDL_Renderer *renderer , SDL_Rect *rect , SDL_Color c , enu
   }
   
   SDL_FreeFormat(format);
-  if(act==CLIPPING || act==BLURRED)
+
+  if(act==CLIPPING || act==BLURRED){
     SDL_UpdateTexture(texture, NULL, pixels2, sizeof(Uint32) * rect->w);
-  else
+    SDL_RenderCopy(renderer, texture, NULL, rect);
+  }
+    if(act== GREY ||act == FILLING|| act == NEGATIVE || act == BRIGHTNESS || act == ADD_CONTRAST || act == SUB_CONTRAST ){
     SDL_UpdateTexture(texture, NULL, pixels, sizeof(Uint32) * rect->w);
-  SDL_RenderCopy(renderer, texture, NULL, rect);
+    SDL_RenderCopy(renderer, texture, NULL, rect);
+  }
+
+  if (act == LEFT_ROTATION || act == RIGHT_ROTATION || act == FLIP_HORIZONTAL || act == FLIP_VERTICAL){
+    /* à ameloirer */
+  //  SDL_RenderClear(renderer);
+    SDL_UpdateTexture(texture, NULL, pixels, sizeof(Uint32) * rect->w);
+    SDL_RenderCopyEx(renderer,texture,NULL,rect,angle,NULL,flip);
+  }
+  if (act ==ZOOM){
+    SDL_UpdateTexture(texture, NULL, pixels, sizeof(Uint32) * rect->w);
+    SDL_RenderCopyEx(renderer,texture,rect,NULL,angle,NULL,flip);
+  } 
+
   SDL_RenderPresent(renderer);
   SDL_DestroyTexture(texture);
   free(pixels);
