@@ -65,7 +65,7 @@ Uint32 flouPixel(Uint32 * pixels, SDL_Rect *rect ,int i, int j, int n){
  * @param act : l'action a faire sur la selection.
  * @return retourne 0 si tout c'est bien passer 1 si non. 
  **/
-int imageProcessing (SDL_Renderer *renderer , SDL_Rect *rect , SDL_Color c , enum Processing act){
+int imageProcessing (SDL_Renderer *renderer , SDL_Rect *rect , SDL_Color c , enum Processing act){  
   int i , j ,n = 2;
   int pitch ;
   double angle ;
@@ -92,6 +92,7 @@ int imageProcessing (SDL_Renderer *renderer , SDL_Rect *rect , SDL_Color c , enu
   texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_STATIC, rect->w, rect->h );
   if(texture == NULL){
     free(pixels);
+    free(pixels2);
     return 1;
   }
 
@@ -104,7 +105,7 @@ int imageProcessing (SDL_Renderer *renderer , SDL_Rect *rect , SDL_Color c , enu
   case FILLING:
     for(i = 0; i < rect->h; i++){
       for(j = 0; j < rect->w; j++){
-	pixels[i * rect->w + j] = SDL_MapRGBA(format,c.r, c.g, c.b ,c.a);
+	      pixels[i * rect->w + j] = SDL_MapRGBA(format,c.r, c.g, c.b ,c.a);
       }
     }
     break;
@@ -183,7 +184,6 @@ int imageProcessing (SDL_Renderer *renderer , SDL_Rect *rect , SDL_Color c , enu
       }
     }
     break;                              
- //   LEFT_ROTATION , RIGHT_ROTATION , ZOOM, FLIP_HORIZONTAL, FLIP_HORIZONTAL
   case LEFT_ROTATION:
     angle = 90;
     flip = SDL_FLIP_NONE;
@@ -233,6 +233,8 @@ int imageProcessing (SDL_Renderer *renderer , SDL_Rect *rect , SDL_Color c , enu
   } 
 
   SDL_RenderPresent(renderer);
+  SDL_Delay(1000);
+
   SDL_DestroyTexture(texture);
   free(pixels);
   free(pixels2);

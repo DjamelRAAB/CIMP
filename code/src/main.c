@@ -55,11 +55,27 @@ int main(void){
 
   SDL_Delay(1000);
 
-  SDL_Rect rect = selectRect ();
-  SDL_Color c = {25, 120 ,90 ,105};
-  enum Processing act = ZOOM ;
+  SDL_Rect rect = selectRect (renderer);
+  SDL_Color c = {255, 255 ,255 ,155};
+  /*enum Processing act = ZOOM ;
   imageProcessing (renderer , &rect , c , act);
+  */
+
+  SDL_Texture * t = couper(renderer , &rect , c);
+
+  SDL_Rect rect2 = selectRect (renderer);
+
+  coller(renderer , &rect2 ,t );
+
+  SDL_Rect rect3 = selectRect (renderer);
+
+  t = copier(renderer , &rect3 );
+
+  SDL_Rect rect4 = selectRect (renderer);
+
+  coller(renderer , &rect4 ,t );
   SDL_Delay(1000);
+  
 
   if(saveImage(window,renderer, "motoDa","png")!=0){
     fprintf(stderr, "Erreur loadImage : %s", SDL_GetError());
