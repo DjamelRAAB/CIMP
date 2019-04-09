@@ -97,6 +97,8 @@ int imageProcessing (SDL_Renderer *renderer , SDL_Rect *rect , SDL_Color c , enu
   }
 
   getPixels(renderer , rect , pixels );
+  getPixels(renderer , rect , pixels2 );
+
   SDL_SetTextureBlendMode(texture, SDL_BLENDMODE_BLEND);
   format = SDL_AllocFormat(SDL_PIXELFORMAT_RGBA8888);
   
@@ -175,10 +177,11 @@ int imageProcessing (SDL_Renderer *renderer , SDL_Rect *rect , SDL_Color c , enu
     break;                              
 
   case CLIPPING:
+
     for(i = 0; i < rect->h; i++){
       for(j = 0; j < rect->w; j++){
 	if(i==0||i==rect->h-1||j==0||j==rect->w-1){
-	  SDL_GetRGBA(pixels[i * rect->w + j], format, &tmp.r, &tmp.g, &tmp.b , &tmp.a );
+//	  SDL_GetRGBA(pixels[i * rect->w + j], format, &tmp.r, &tmp.g, &tmp.b , &tmp.a );
 	  pixels2[i * rect->w + j] = 255 - SDL_abs(pixels[i * rect->w + j] - flouPixel(pixels,rect,i,j,n));
 	}
       }
@@ -200,7 +203,7 @@ int imageProcessing (SDL_Renderer *renderer , SDL_Rect *rect , SDL_Color c , enu
     angle = 0;
     flip = SDL_FLIP_VERTICAL;
     break;
-  case ZOOM :
+  case SUB_FRAMING :
     angle = 0 ;
     flip = SDL_FLIP_NONE;
     break;
@@ -227,7 +230,7 @@ int imageProcessing (SDL_Renderer *renderer , SDL_Rect *rect , SDL_Color c , enu
     SDL_UpdateTexture(texture, NULL, pixels, sizeof(Uint32) * rect->w);
     SDL_RenderCopyEx(renderer,texture,NULL,rect,angle,NULL,flip);
   }
-  if (act ==ZOOM){
+  if (act ==SUB_FRAMING){
     SDL_UpdateTexture(texture, NULL, pixels, sizeof(Uint32) * rect->w);
     SDL_RenderCopyEx(renderer,texture,rect,NULL,angle,NULL,flip);
   } 

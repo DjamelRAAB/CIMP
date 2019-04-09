@@ -2,6 +2,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "shared.h"
+#include <sys/types.h>
+#include <unistd.h>
+
 
 
 /**
@@ -23,13 +26,12 @@ int init(SDL_Window **window, SDL_Renderer **renderer, int w, int h){
     return -1;
   }
 
-  *renderer = SDL_CreateRenderer(*window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+  *renderer = SDL_CreateRenderer(*window, -1, SDL_RENDERER_ACCELERATED);
  
   if(renderer == NULL){
     fprintf(stderr, "Erreur SDL_CreateRenderer : %s", SDL_GetError());
     return -1;
   }
-  
   return 0;
 }
 
@@ -46,7 +48,7 @@ int setWindowColor(SDL_Renderer *renderer, SDL_Color color){
   
   if(SDL_RenderClear(renderer) < 0)
     return -1;
-  
+  SDL_RenderPresent(renderer);
   return 0;  
 }
 

@@ -25,9 +25,8 @@ int getPixels(SDL_Renderer *renderer , SDL_Rect *rect , Uint32 * pixels){
  * @param renderer : le rendu sure le quel travailler.
  * @return rect : le rectangle sélectionner.
  **/
-SDL_Rect selectRect (SDL_Renderer *renderer ){
+SDL_Rect selectRect (SDL_Renderer *renderer, SDL_Event e ){
   int b=0 ,down = 0 ,pitch;
-  SDL_Event e;
   SDL_Point src ,dst;
   SDL_Rect rect;
   SDL_Rect tmp ;
@@ -48,8 +47,8 @@ SDL_Rect selectRect (SDL_Renderer *renderer ){
   SDL_UpdateTexture(texture, NULL, pixels, sizeof(Uint32) * tmp.w);
   SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
   while(b == 0){
-    if (SDL_PollEvent(&e)) {
-      switch(e.type){
+    if(SDL_PollEvent(&e)){
+    switch(e.type){
         case SDL_MOUSEBUTTONDOWN :
           if(e.button.button==SDL_BUTTON_LEFT) {
           src.x = e.button.x, 
@@ -73,6 +72,7 @@ SDL_Rect selectRect (SDL_Renderer *renderer ){
           rect.w = abs(src.x - dst.x);
           SDL_RenderCopy(renderer, texture, NULL, NULL);
           SDL_RenderDrawRect(renderer, &rect); 
+          //SDL_RenderCopy(renderer, texture, &rect, NULL);          
           SDL_RenderPresent(renderer);
           }
           break;
@@ -81,6 +81,8 @@ SDL_Rect selectRect (SDL_Renderer *renderer ){
           if(e.button.button==SDL_BUTTON_LEFT) {
             dst.x = e.button.x, 
             dst.y = e.button.y;  
+            rect.h = abs(src.y - dst.y);
+          rect.w = abs(src.x - dst.x);
           }
         b=1;
         break;
