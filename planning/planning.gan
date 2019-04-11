@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><project name="Cimp - Console Image Manipulation Program" company="Étudiant en L3INFO à Paris Diderot" webLink="http://" view-date="2019-02-04" view-index="0" gantt-divider-location="379" resource-divider-location="300" version="2.8.10" locale="fr">
+<?xml version="1.0" encoding="UTF-8"?><project name="Cimp - Console Image Manipulation Program" company="Étudiant en L3INFO à Paris Diderot" webLink="http://" view-date="2019-03-14" view-index="0" gantt-divider-location="379" resource-divider-location="300" version="2.8.10" locale="fr">
     <description><![CDATA[Implémentation en langage C un logiciel de manipulation d’images matricielles (“raster graphics editor”).
 # les membre d'équipe: - HADJEBAR Rabah
 	                - RAAB Djamel
@@ -7,7 +7,7 @@
         <field id="tpd3" name="Nom" width="229" order="0"/>
         <field id="tpd4" name="Date de début" width="56" order="1"/>
         <field id="tpd5" name="Date de fin" width="90" order="2"/>
-        <option id="color.recent"><![CDATA[#3300cc #990033 #cc3300 #ff3300 #3333ff]]></option>
+        <option id="color.recent"><![CDATA[#006666 #990000 #3300cc #990033 #cc3300 #ff3300 #3333ff]]></option>
     </view>
     <view id="resource-table">
         <field id="0" name="Nom" width="210" order="0"/>
@@ -55,6 +55,7 @@
             <notes><![CDATA[Création des branches sur GitLab]]></notes>
         </task>
         <task id="14" name="Appentissage de SDL2.0" color="#8cb6ce" meeting="false" start="2019-02-01" duration="45" complete="0" thirdDate="2019-02-19" thirdDate-constraint="0" expand="true"/>
+        <task id="22" name="Réalisation du CLI" color="#990000" meeting="false" start="2019-04-01" duration="14" complete="0" thirdDate="2019-02-14" thirdDate-constraint="0" expand="true"/>
         <task id="15" name="Définition du CLI" color="#cc3300" meeting="false" start="2019-02-22" duration="1" complete="0" thirdDate="2019-02-19" thirdDate-constraint="0" priority="2" expand="true">
             <notes><![CDATA[Définition d'une gramamaire d'interprétation pour les commandes]]></notes>
         </task>
@@ -62,6 +63,7 @@
             <notes><![CDATA[Familiarisation avec la librairie SDL2.0   ]]></notes>
         </task>
         <task id="21" name="Organisation du projet en modules" color="#3300cc" meeting="false" start="2019-02-26" duration="4" complete="0" thirdDate="2019-02-19" thirdDate-constraint="0" expand="true"/>
+        <task id="26" name="Réalisation des fonctionnalités minimales" color="#006666" meeting="false" start="2019-03-04" duration="30" complete="0" thirdDate="2019-02-18" thirdDate-constraint="0" priority="2" expand="true"/>
     </tasks>
     <resources>
         <resource id="0" name="HADJEBAR" function="Default:0" contacts="" phone=""/>
@@ -74,16 +76,20 @@
         <allocation task-id="15" resource-id="0" function="Default:0" responsible="true" load="100.0"/>
         <allocation task-id="17" resource-id="0" function="Default:0" responsible="true" load="100.0"/>
         <allocation task-id="21" resource-id="0" function="Default:0" responsible="true" load="100.0"/>
+        <allocation task-id="26" resource-id="0" function="Default:0" responsible="false" load="100.0"/>
+        <allocation task-id="22" resource-id="0" function="Default:0" responsible="true" load="100.0"/>
         <allocation task-id="6" resource-id="1" function="Default:0" responsible="true" load="100.0"/>
         <allocation task-id="9" resource-id="1" function="Default:0" responsible="true" load="100.0"/>
         <allocation task-id="4" resource-id="1" function="Default:0" responsible="true" load="100.0"/>
         <allocation task-id="15" resource-id="1" function="Default:0" responsible="true" load="100.0"/>
         <allocation task-id="17" resource-id="1" function="Default:0" responsible="true" load="100.0"/>
         <allocation task-id="21" resource-id="1" function="Default:0" responsible="true" load="100.0"/>
+        <allocation task-id="26" resource-id="1" function="Default:0" responsible="true" load="100.0"/>
         <allocation task-id="9" resource-id="2" function="Default:0" responsible="true" load="100.0"/>
         <allocation task-id="4" resource-id="2" function="Default:0" responsible="true" load="100.0"/>
         <allocation task-id="17" resource-id="2" function="Default:0" responsible="true" load="100.0"/>
         <allocation task-id="21" resource-id="2" function="Default:0" responsible="true" load="100.0"/>
+        <allocation task-id="26" resource-id="2" function="Default:0" responsible="false" load="100.0"/>
     </allocations>
     <vacations/>
     <previous/>
