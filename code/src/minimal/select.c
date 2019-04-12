@@ -3,8 +3,8 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include "select.h"
-#include "image_processing.h"
+#include "MINIMAL/select.h"
+#include "MINIMAL/image_processing.h"
 
 /**
  * La fonction select fait une selection sur un rendu 

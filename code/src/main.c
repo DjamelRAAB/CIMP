@@ -5,11 +5,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-#include "load_save.h"
-#include "shared.h"
-#include "select.h"
-#include "image_processing.h"
-#include "zoom.h"
+#include "MINIMAL/load_save.h"
+#include "SHARED/shared.h"
+#include "MINIMAL/select.h"
+#include "MINIMAL/image_processing.h"
+#include "EXTENSION/zoom.h"
 
 
 
@@ -33,7 +33,7 @@ int main(void){
     goto Quit;
   }
   SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
-  texture_image = loadImage("./asserts/katoche.jpg", renderer , 0); 
+  texture_image = loadImage("./assets/pictures/katoche.jpg", renderer , 0); 
   if(texture_image == NULL){
     fprintf(stderr, "Erreur loadImage : %s", SDL_GetError());
     goto Quit;      
@@ -49,21 +49,15 @@ int main(void){
     }
     if(zoom(renderer,event)==1)
       goto Quit;
-    /*
-    if(event.type == SDL_MOUSEBUTTONDOWN){
-      SDL_Rect rect = selectRect (renderer,event);
-      SDL_Color c = {255, 255 ,255 ,155};
-      enum Processing act = CLIPPING ;
-      imageProcessing (renderer , &rect , c , act);
-    }
-    */
   }
-  if(saveImage(window,renderer, "motoDa","png")!=0){
+
+  Quit :  
+
+  if(saveImage(window,renderer, "SAVE/savePicture","png")!=0){
       fprintf(stderr, "Erreur loadImage : %s", SDL_GetError());
       goto Quit;
   }
 
-  Quit :  
   if(texture_image != NULL)
     SDL_DestroyTexture(texture_image);
   if(renderer !=NULL )

@@ -2,8 +2,8 @@
 #include <SDL2/SDL_image.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include "image_processing.h"
-#include "select.h"
+#include "MINIMAL/image_processing.h"
+#include "MINIMAL/select.h"
 
 /**
  * Change la luminosité d'une couleur.

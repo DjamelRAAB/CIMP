@@ -2,8 +2,8 @@
 #include <SDL2/SDL_image.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include "load_save.h"
-#include "select.h"
+#include "MINIMAL/load_save.h"
+#include "MINIMAL/select.h"
 
 
 /**

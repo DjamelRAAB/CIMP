@@ -3,7 +3,8 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include "select.h"
+#include "MINIMAL/select.h"
+
 
 /**
  * La fonction zoom permet de zoumer sur une image et de scroller avec les fléches,
