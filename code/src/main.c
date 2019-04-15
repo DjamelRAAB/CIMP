@@ -1,8 +1,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <SDL2/SDL.h>
-#include <shared.h>
-#include <cli.h>
+#include <SHARED/shared.h>
+#include <CLI/cli.h>
 
 #define H 900
 #define W 920
@@ -40,25 +40,29 @@ int main(int argc, char const *argv[])
         goto Quit;
     }
 
-    SDL_PixelFormat *format = SDL_AllocFormat(SDL_PIXELFORMAT_RGBA8888);
-    SDL_LockTexture(texture_image, NULL, &tmp, &pitch);
-    pixels = tmp;
-    for(size_t i = 0; i < 200; i++)
-    {   
-        for(size_t j = 0; j < 200; j++)
-        {
-            pixels[i * 200 + j] = SDL_MapRGBA(format, (Uint8)i, 0, 0, 255);
-        }
-    }
-    
-    SDL_FreeFormat(format);
-    SDL_UnlockTexture(texture_image);
 
     SDL_RenderCopy(renderer, texture_image, NULL, NULL);
     SDL_SetRenderDrawColor(renderer, vert.r,vert.g, vert.b, 10);
     SDL_RenderDrawLine(renderer,0,0, 500, 500);
     SDL_RenderPresent(renderer);
-    SDL_Delay(3000);
+    SDL_Event e;
+    int stat = 1;
+    do
+    {
+        SDL_PollEvent(&e);
+        switch (e.type)
+        {
+            case SDL_QUIT:
+                printf(" fermer = %d \n ", e.type);
+                stat = 0 ;
+                break;
+        
+            default:
+                printf("%d \n ", e.type);
+                break;
+        }
+    } while (stat != 0);
+    
 
     status = EXIT_SUCCESS;
 
