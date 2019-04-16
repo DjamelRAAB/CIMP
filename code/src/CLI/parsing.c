@@ -8,18 +8,18 @@ cmd *CreateCmd(char *str) {
     char saveStr[BUF_LENGTH];
     strcpy(saveStr, str);
 
-    cmd* cmd = constListCmds(saveStr);
-    if( cmd != NULL){
-        printf("\n  cmd = %s, nbArgs = %d , args : ", (cmd->args)[0], cmd->nb_args );
-        if((cmd->nb_args) > 0) {
+    cmd* c = constListCmds(saveStr);
+    if( c != NULL){
+        printf("\n Parssing: cmd = %s, nbArgs = %d , args : ", c->nameCmd, c->nb_args );
+        if((c->nb_args) > 0) {
             int j;
-            for(j = 1;j < (cmd->nb_args);j++){
-                printf(" %s ", (cmd->args)[j]);
+            for(j = 0;j < (c->nb_args);j++){
+                printf(" %s ", (c->args)[j]);
             }
         }
     }
     printf("\n");
-    return cmd;
+    return c;
 }
 
 
@@ -27,23 +27,29 @@ cmd* constListCmds(char *commande){
 
     cmd *c = malloc(sizeof(cmd));
     c->args = malloc(sizeof(char)*MAX_ARGS);
-    parse(commande,c->args, &(c->nb_args), " ");
+    parse(commande,c->nameCmd,c->args, &(c->nb_args), " ");
     
     return c;
 }
 
 
-int parse(char* str, char** strpiped, int *nbCmd, char* caracteres) 
+int parse(char* str, char *nameC ,char** argsCmd, int *nbCmd, char* caracteres) 
 { 
     int i = 0;
     char* p = strtok(str, caracteres); 
+    /* Récuperer le nom de la commande */
+    strcpy(nameC, p);
+
+    /* Récuperer les arguments */
+    p = strtok(NULL, caracteres);
     while (p != NULL) { 
-        strpiped[i] = p; 
+        argsCmd[i] = p; 
         i++;
         p = strtok(NULL, caracteres);
     }
     *nbCmd = i;
-    if (strpiped[1] == NULL) 
+
+    if (argsCmd[0] == NULL) 
         return 0; 
     else { 
         return 1; 

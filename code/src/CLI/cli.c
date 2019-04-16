@@ -15,38 +15,32 @@
 
 
 /****************** Les Headers *********************/
-cmd *command(char * input);
 cmd *cmd_prompt();
 void vider_string(char * s);
-short isIntern(char* text);
-int exec_intern(cmd* c);
-/*int exec_extern(cmd* c, int* rp, int* wp);
-int exec_ench(cmd* c);*/
+short isCommand(char* text);
+int execution(cmd* c);
 int exec_cmd(cmd* c);
 void initShell();
 void printInviteShell();
 /****************************************************/
 
 int nbCommands = 1;
-char* commands[] = { 
-    "loadimages" 
+formatCmd commands[] = { 
+  {"loadimages", 0, 0}
 };
 
-char* currentWindows = NULL;
-
-int result = 0;			
-int saved_stdout;
-int saved_stdin;
+/* Une variable où on sauvegarde la fenêtre ouverte actuallement */
+char currentWindows[NAME_MAX] ;
+int result = 0, busyWindows = 0;			
 
 int main(void){
 
-  cmd *c = malloc(sizeof(cmd));
+  cmd *c;
   initShell ();
-  //boucle d'intéraction avec l'utilisateur
-  //pour en sortir pour le moment cntrl c
+
+  /*boucle d'intéraction avec l'utilisateur*/
   while(1){
     c=cmd_prompt();
-    //printf("\n cmd = %s, nbArgs = %d , args : %s ", (c->args)[0], c->nb_args, (c->args)[1] );
     result = exec_cmd(c);
     free(c);
   }
@@ -64,9 +58,9 @@ void initShell(){
   printf("\033[H\033[J");
 }
 
-short isIntern(char* text){
+short isCommand(char* text){
   for(int i = 0;i < nbCommands;i++){
-    if(strcmp(text, commands[i]) == 0){
+    if(strcmp(text, commands[i].name) == 0){
       return 1;
     }
   }
@@ -74,9 +68,8 @@ short isIntern(char* text){
 }
 
 int exec_cmd(cmd* c){
-  printf("\n -%s-, -%s-, %i\n",c->args[0], c->args[1], c->nb_args);
-  if(isIntern(c->args[0])){
-    return exec_intern(c);
+  if(isCommand(c->nameCmd)){
+    return execution(c);
   }
   else{
     perror("Commandes introuvable");
@@ -84,14 +77,15 @@ int exec_cmd(cmd* c){
   }
 }
 
-int exec_intern(cmd* c){
-  char* name = c->args[0];
+int execution(cmd* c){
+  char* name = c->nameCmd;
   char** args = c->args;
   int nb_args = c->nb_args;
 
   if(strcmp(name, "loadimages") == 0){
-    currentWindows = c->args[0];
-    fprintf(stdout," succes !!!");
+    busyWindows = 1;
+    strcpy(currentWindows, c->args[0]);
+    
   }else{
     perror("-mpsh: no such intern command");
     return 1;
@@ -104,30 +98,31 @@ int exec_intern(cmd* c){
 cmd *cmd_prompt(){
   char *curr_dir=malloc(BUF_LENGTH*sizeof(char));
   char *input_cmd=malloc(BUF_LENGTH*sizeof(char));
-  cmd *c = malloc(sizeof(cmd));
-  
-  getcwd(curr_dir,BUF_LENGTH);
+  cmd *c;
 
-  printInviteShell(curr_dir);
-  
-  fgets(input_cmd,BUF_LENGTH,stdin);
-  //suppression de \n
-  char* n = strchr(input_cmd, '\n');
+  getcwd(curr_dir,BUF_LENGTH);  // Récuprer le nom du répertoire currant 
+  printInviteShell(curr_dir);   // Affichage de l'invite de commmande  
+  fgets(input_cmd,BUF_LENGTH,stdin);  // Écriture de la commande par l'utilisateur
+
+  char* n = strchr(input_cmd, '\n'); //suppression de \n
   if(n != NULL){
     n[0] = '\0';
   }
 
   c = CreateCmd(input_cmd);
-  free(input_cmd);
-  free(curr_dir);  
-  return (c);
+
+  /* libération de la mémoire */
+  //free(input_cmd);
+  //free(curr_dir);  
+
+  return c; // Retourner une commande structurée 
 }
 
 /* L'affichage de l'invite de commande */
 void printInviteShell(char *curr_dir){
   fprintf(stdout,"\n");
   
-  if (currentWindows != NULL) {
+  if (busyWindows != 0 ) {
       fprintf(stdout, "\033[01;34m %s \033[00m >>> ", currentWindows );
   }
   else{
