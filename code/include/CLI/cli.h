@@ -10,7 +10,6 @@ typedef struct cmd{
     char nameCmd[NAME_MAX];
     char **args;
     int nb_args;
-    //struct cmd *next;
 } cmd;
 
 /* le format d'une commande */
