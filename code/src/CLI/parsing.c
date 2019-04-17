@@ -1,8 +1,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include "CLI/cli.h"
-#include "CLI/parsing.h"
+#include "cli.h"
+#include "parsing.h"
 
 cmd *CreateCmd(char *str) {
     char saveStr[BUF_LENGTH];
@@ -10,7 +10,7 @@ cmd *CreateCmd(char *str) {
 
     cmd* c = constListCmds(saveStr);
     if( c != NULL){
-        printf("\n Parssing: cmd = %s, nbArgs = %d , args : ", c->nameCmd, c->nb_args );
+        printf("\n Parssing: cmd = %s , nbArgs = %d , args : ", c->nameCmd, c->nb_args );
         if((c->nb_args) > 0) {
             int j;
             for(j = 0;j < (c->nb_args);j++){
