@@ -39,7 +39,6 @@ SDL_Texture *loadImage(const char path[], SDL_Renderer *renderer, int boolAlpha)
   SDL_FreeSurface(tmp);
 
   if(texture == NULL){
-    fprintf(stderr, "zeb zeb zeb \n");    
     fprintf(stderr, "Erreur SDL_CreateTextureFromSurface : %s", SDL_GetError());
     return NULL;
   }

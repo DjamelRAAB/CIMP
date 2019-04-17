@@ -207,6 +207,16 @@ int imageProcessing (SDL_Renderer *renderer , SDL_Rect *rect , SDL_Color c , enu
     angle = 0 ;
     flip = SDL_FLIP_NONE;
     break;
+  case ADD_FRAMING :
+    angle = 0 ;
+    flip = SDL_FLIP_NONE;
+    SDL_Rect fRect;
+    SDL_RenderGetViewport(renderer, &fRect);//on récupère la zone de travaille dans rect
+    rect->x= (fRect.w-rect->w)/2;
+    rect->y= (fRect.h-rect->h)/2;
+    SDL_RenderClear(renderer);
+    
+    break;
   default:
     printf("Aucun traitement disponible pour l'act demander!");
     return 1; 
@@ -226,13 +236,18 @@ int imageProcessing (SDL_Renderer *renderer , SDL_Rect *rect , SDL_Color c , enu
 
   if (act == LEFT_ROTATION || act == RIGHT_ROTATION || act == FLIP_HORIZONTAL || act == FLIP_VERTICAL){
     /* à ameloirer */
-  //  SDL_RenderClear(renderer);
     SDL_UpdateTexture(texture, NULL, pixels, sizeof(Uint32) * rect->w);
     SDL_RenderCopyEx(renderer,texture,NULL,rect,angle,NULL,flip);
   }
   if (act ==SUB_FRAMING){
     SDL_UpdateTexture(texture, NULL, pixels, sizeof(Uint32) * rect->w);
-    SDL_RenderCopyEx(renderer,texture,rect,NULL,angle,NULL,flip);
+    SDL_RenderCopy(renderer, texture, rect, NULL);
+  } 
+
+  if (act==ADD_FRAMING){
+    SDL_RenderPresent(renderer);
+    SDL_UpdateTexture(texture, NULL, pixels, sizeof(Uint32) * rect->w);
+    SDL_RenderCopy(renderer, texture, NULL, rect);
   } 
 
   SDL_RenderPresent(renderer);

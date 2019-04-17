@@ -25,7 +25,8 @@ int getPixels(SDL_Renderer *renderer , SDL_Rect *rect , Uint32 * pixels){
  * @param renderer : le rendu sure le quel travailler.
  * @return rect : le rectangle sélectionner.
  **/
-SDL_Rect selectRect (SDL_Renderer *renderer, SDL_Event e ){
+SDL_Rect selectRect (SDL_Renderer *renderer){
+  SDL_Event *e =malloc (sizeof(SDL_Event));
   int b=0 ,down = 0 ,pitch;
   SDL_Point src ,dst;
   SDL_Rect rect;
@@ -47,19 +48,19 @@ SDL_Rect selectRect (SDL_Renderer *renderer, SDL_Event e ){
   SDL_UpdateTexture(texture, NULL, pixels, sizeof(Uint32) * tmp.w);
   SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
   while(b == 0){
-    if(SDL_PollEvent(&e)){
-    switch(e.type){
+    if(SDL_PollEvent(e)){
+    switch(e->type){
         case SDL_MOUSEBUTTONDOWN :
-          if(e.button.button==SDL_BUTTON_LEFT) {
-          src.x = e.button.x, 
-          src.y = e.button.y;
+          if(e->button.button==SDL_BUTTON_LEFT) {
+          src.x = e->button.x, 
+          src.y = e->button.y;
           }      
           down=1;
           break;
         case SDL_MOUSEMOTION :
           if(down==1){
-            dst.x = e.button.x, 
-            dst.y = e.button.y;    
+            dst.x = e->button.x, 
+            dst.y = e->button.y;    
             if(src.x<dst.x)
               rect.x=src.x;
             else
@@ -78,17 +79,21 @@ SDL_Rect selectRect (SDL_Renderer *renderer, SDL_Event e ){
           break;
         case SDL_MOUSEBUTTONUP :
           down =0;
-          if(e.button.button==SDL_BUTTON_LEFT) {
-            dst.x = e.button.x, 
-            dst.y = e.button.y;  
+          if(e->button.button==SDL_BUTTON_LEFT) {
+            dst.x = e->button.x, 
+            dst.y = e->button.y;  
             rect.h = abs(src.y - dst.y);
           rect.w = abs(src.x - dst.x);
           }
         b=1;
         break;
+        case SDL_QUIT : 
+          goto Quit;
+          break;
       }
     }
   }
+  Quit :
   SDL_RenderCopy(renderer, texture, NULL, NULL);
   SDL_DestroyTexture(texture);
   free(pixels);
@@ -99,7 +104,7 @@ SDL_Rect selectRect (SDL_Renderer *renderer, SDL_Event e ){
  * La fonction copier renvoi une texture qui contient une copie du rectangle sélectionner 
  * @param renderer : le rendu sure le quel travailler.
  * @param rect : le rectangle à sélectionner.
- * @return  un pointeur vers une texture.
+ * @return  un pointeur vers une texture->
  **/
 SDL_Texture * copier(SDL_Renderer *renderer , SDL_Rect *rect ){
   int pitch ;
@@ -127,7 +132,7 @@ SDL_Texture * copier(SDL_Renderer *renderer , SDL_Rect *rect ){
  * @param renderer : le rendu sure le quel travailler.
  * @param rect : le rectangle à sélectionner.
  * @param color : la couleur avec la quel la parti sélectionner sera remplie
- * @return  un pointeur vers une texture.
+ * @return  un pointeur vers une texture->
  **/
 SDL_Texture * couper(SDL_Renderer *renderer , SDL_Rect *rect , SDL_Color color){
   SDL_Texture *texture = copier(renderer , rect );

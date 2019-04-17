@@ -9,7 +9,7 @@
 
 
 int getPixels(SDL_Renderer *renderer , SDL_Rect *rect, Uint32 * pixels );
-SDL_Rect selectRect (SDL_Renderer *renderer ,SDL_Event e);
+SDL_Rect selectRect (SDL_Renderer *renderer);
 void coller(SDL_Renderer *renderer , SDL_Rect *rect, SDL_Texture *s);
 SDL_Texture * couper(SDL_Renderer *renderer , SDL_Rect *rect , SDL_Color c);
 SDL_Texture * copier(SDL_Renderer *renderer , SDL_Rect *rect );

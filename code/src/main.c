@@ -28,6 +28,10 @@ int main(void){
   SDL_Renderer *renderer = NULL;
   SDL_Texture *texture_image = NULL;
   int statut = EXIT_FAILURE;
+  SDL_Color c = {0,0,0,0};
+  enum Processing act = ADD_FRAMING ;
+  SDL_Rect rect;
+
   if(init(&window, &renderer, w, h) != 0){
     fprintf(stderr, "Erreur SDL_CreateWindow or SDL_CreateRenderer : %s", SDL_GetError());
     goto Quit;
@@ -42,14 +46,20 @@ int main(void){
   SDL_RenderPresent(renderer);   
   statut = EXIT_SUCCESS;
   SDL_Event event;
-  while(1){
-    SDL_PollEvent(&event);
-    if(event.type == SDL_QUIT){
-      goto Quit;
+  do{
+    if(SDL_PollEvent(&event)){
+      switch(event.type){
+        case SDL_QUIT : 
+          goto Quit ;
+          break;
+        case SDL_MOUSEBUTTONUP:
+          rect = selectRect (renderer);
+          imageProcessing (renderer , &rect ,  c , act) ;
+          SDL_Delay(50);
+          break;
+      }
     }
-    if(zoom(renderer,event)==1)
-      goto Quit;
-  }
+  }  while(event.type != SDL_QUIT );
 
   Quit :  
 
