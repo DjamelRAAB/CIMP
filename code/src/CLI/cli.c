@@ -3,8 +3,8 @@
 #include <stdio.h>
 #include <string.h>
 #include <pwd.h>
-#include "CLI/cli.h"
-#include "CLI/parsing.h"
+#include "cli.h"
+#include "parsing.h"
 
 
 /* Au lancement du Shell  */
