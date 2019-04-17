@@ -20,4 +20,4 @@ parsing.o: src/CLI/parsing.c src/CLI/cli.h src/CLI/parsing.h
 clean:
 	rm -rf *.o
 mrproper: clean
-	rm -rf $(EXEC)
+	rm -rf $(EXEC) 
