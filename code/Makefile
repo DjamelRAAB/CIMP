@@ -5,4 +5,6 @@ run:
 	LIBGL_DEBUG=verbose LD_LIBRARY_PATH=./lib ./main
 
 clean:
-	rm -f ./main
+	rm -rf *.o
+mrproper: clean
+	rm -rf $(EXEC)
