@@ -5,16 +5,20 @@ EXEC=cimp
 
 all: $(EXEC)
 
-cimp: cimp.o shared.o cli.o parsing.o	
+cimp: cimp.o shared.o cli.o parsing.o openSaveImages.o windows.o
 	gcc $(CFLAGS) -o $@ $^ $(LDFLAGS)
 
-cimp.o: src/cimp.c src/SHARED/shared.h src/CLI/cli.h src/CLI/parsing.h
+cimp.o: src/cimp.c src/shared/shared.h src/cli/cli.h src/cli/parsing.h
 	gcc $(CFLAGS) -o  $@ -c $< $(LDFLAGS)
-shared.o: src/SHARED/shared.c src/SHARED/shared.h
+shared.o: src/shared/shared.c src/shared/shared.h
 	gcc $(CFLAGS) -o  $@ -c $<   $(LDFLAGS)
-cli.o: src/CLI/cli.c src/CLI/cli.h src/CLI/parsing.h
+cli.o: src/cli/cli.c src/cli/cli.h src/cli/parsing.h
 	gcc $(CFLAGS) -o  $@ -c $<  
-parsing.o: src/CLI/parsing.c src/CLI/cli.h src/CLI/parsing.h
+parsing.o: src/cli/parsing.c src/cli/cli.h src/cli/parsing.h
+	gcc $(CFLAGS) -o  $@ -c $< 
+openSaveImages.o: src/minimale/openSaveImages.c src/minimale/openSaveImages.h
+	gcc $(CFLAGS) -o  $@ -c $< 
+windows.o: src/windows/windows.c src/windows/windows.h
 	gcc $(CFLAGS) -o  $@ -c $< 
 
 clean:

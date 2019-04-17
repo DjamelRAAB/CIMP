@@ -43,7 +43,7 @@ int setWindowColor(SDL_Renderer *renderer, SDL_Color color){
  * @param  path : le chemin absolut ou relatif vers l'image
  * @param  la composante renderer sur la quelle on veux chargé l'image
  * @return Une SDL_Texture modifiable qui contient l'image qu'on veux chargé  
- **/
+ *
 SDL_Texture *loadImage(const char path[], SDL_Renderer *renderer){
 
   SDL_Surface *tmp = NULL; 
@@ -82,4 +82,4 @@ SDL_Texture *loadImage(const char path[], SDL_Renderer *renderer){
 
   return texture_enable;
 
-}
+}*/

@@ -16,5 +16,5 @@ int init(SDL_Window **window, SDL_Renderer **renderer, int w, int h);
 	/* Définition d'une fonction qui charge une image au format BMP */
 
 
-SDL_Texture *loadImage(const char path[], SDL_Renderer *renderer);
+//SDL_Texture *loadImage(const char path[], SDL_Renderer *renderer);
 #endif

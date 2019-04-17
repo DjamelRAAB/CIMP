@@ -1,3 +1,5 @@
+#include <SDL2/SDL.h>
+
 #ifndef __WINDOWS__H__
 #define __WINDOWS__H__
 

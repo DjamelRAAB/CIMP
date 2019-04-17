@@ -3,10 +3,11 @@
 #include <SDL2/SDL.h>
 #include <pwd.h>
 #include <unistd.h>
-#include "CLI/cli.h"
-#include "CLI/parsing.h"
-#include "SHARED/shared.h"
-#include "WINDOWS/windows.h"
+#include "cli/cli.h"
+#include "cli/parsing.h"
+#include "shared/shared.h"
+#include "windows/windows.h"
+#include "minimale/openSaveImages.h"
 
 /*---------------- Les Headers --------------------*/
 short isCommand(char* text);
@@ -109,9 +110,8 @@ int execution(cmd* c){
   if(strcmp(name, "loadimages") == 0){
     busyWindows = 1;
     currentWindows = malloc(sizeof(windows));
-    strcpy(currentWindows->path, name);  
-    //SDL_Window *pWindow = NULL; 
-    //pWindow = SDL_CreateWindow("image", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,600,600, SDL_WINDOW_SHOWN);
+    strcpy(currentWindows->path, args[0]);
+    currentWindows = openImages(args[0]);
     
   }else{
     perror("-mpsh: no such intern command");
