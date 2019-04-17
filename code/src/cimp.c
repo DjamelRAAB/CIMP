@@ -6,9 +6,7 @@
 #include "CLI/cli.h"
 #include "CLI/parsing.h"
 #include "SHARED/shared.h"
-
-#define H 900
-#define W 920
+#include "WINDOWS/windows.h"
 
 /*---------------- Les Headers --------------------*/
 short isCommand(char* text);
@@ -25,7 +23,8 @@ formatCmd commands[] = {
 };
 
 /* Une variable où on sauvegarde la fenêtre ouverte actuallement */
-char currentWindows[NAME_MAX] ;
+windows fenetres[MAX_WINDOWS];
+windows *currentWindows;
 int result = 0, busyWindows = 0;	
 /*-------------------------------------------------*/
 
@@ -104,14 +103,15 @@ int exec_cmd(cmd* c){
 /* Éxecution des commandes */ 
 int execution(cmd* c){
   char* name = c->nameCmd;
-  //char** args = c->args;
-  //int nb_args = c->nb_args;
+  char** args = c->args;
+  int nb_args = c->nb_args;
 
   if(strcmp(name, "loadimages") == 0){
     busyWindows = 1;
-    strcpy(currentWindows, c->args[0]);
-    SDL_Window *pWindow = NULL; 
-    pWindow = SDL_CreateWindow("image", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,600,600, SDL_WINDOW_SHOWN);
+    currentWindows = malloc(sizeof(windows));
+    strcpy(currentWindows->path, name);  
+    //SDL_Window *pWindow = NULL; 
+    //pWindow = SDL_CreateWindow("image", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,600,600, SDL_WINDOW_SHOWN);
     
   }else{
     perror("-mpsh: no such intern command");
@@ -125,7 +125,7 @@ void printInviteShell(char *curr_dir){
   fprintf(stdout,"\n");
   
   if (busyWindows != 0 ) {
-      fprintf(stdout, "\033[01;34m %s \033[00m >>> ", currentWindows );
+      fprintf(stdout, "\033[01;34m %s \033[00m >>> ", currentWindows->path );
   }
   else{
     char str[BUF_LENGTH]= DEF_INVITE;
