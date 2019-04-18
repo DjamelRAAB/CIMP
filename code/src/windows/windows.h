@@ -20,4 +20,9 @@ typedef struct windows{
 }windows;
 
 
+/* ---------------------------------------------------------*/
+
+windows *initWindows(const char path[]);
+
+
 #endif

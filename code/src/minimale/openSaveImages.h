@@ -5,6 +5,8 @@
 #define __OPENSAVEIMAGES__H__
 
 windows *openImages(const char path[]);
-SDL_Texture *loadImage(const char path[], SDL_Renderer *renderer, int boolAlpha);
+/* Définition d'une fonction qui charge une image au format BMP */
+SDL_Texture *loadImage(const char path[], SDL_Renderer *renderer);
 
+void closeImage(windows *w);
 #endif

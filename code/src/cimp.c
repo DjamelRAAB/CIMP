@@ -18,9 +18,10 @@ void printInviteShell(char *curr_dir);
 /*-------------------------------------------------*/
 
 /* -------------- Variables Globale -------------- */
-int nbCommands = 1;
+int nbCommands = 2;
 formatCmd commands[] = { 
-  {"loadimages", 0, 0}
+  {"openimages", 0, 0},
+  {"closeimages", 0,0}
 };
 
 /* Une variable où on sauvegarde la fenêtre ouverte actuallement */
@@ -33,7 +34,7 @@ int main()
 { 
     int status = EXIT_FAILURE;
     cmd *c;
-    if(SDL_Init(SDL_INIT_VIDEO != 0)){
+    if(SDL_Init(SDL_INIT_VIDEO) != 0){
         fprintf(stderr, "Erreur SDL_Init : %s", SDL_GetError());
         goto Quit;
     }
@@ -42,9 +43,9 @@ int main()
 
     /* Boucle d'intéraction avec l'utilisateur */
     while(1){
-        c=cmd_prompt();
-        result = exec_cmd(c);
-        free(c);
+      c=cmd_prompt();
+      result = exec_cmd(c);
+      free(c);
     }
 
     status = EXIT_SUCCESS;
@@ -71,10 +72,6 @@ cmd *cmd_prompt(){
   }
 
   c = CreateCmd(input_cmd);
-
-  /* libération de la mémoire */
-  //free(input_cmd);
-  //free(curr_dir);  
 
   return c; // Retourner une commande structurée 
 }
@@ -107,12 +104,15 @@ int execution(cmd* c){
   char** args = c->args;
   int nb_args = c->nb_args;
 
-  if(strcmp(name, "loadimages") == 0){
-    busyWindows = 1;
-    currentWindows = malloc(sizeof(windows));
-    strcpy(currentWindows->path, args[0]);
+  if(strcmp(name, "openimages") == 0){
     currentWindows = openImages(args[0]);
-    
+    if( currentWindows != NULL)
+      busyWindows = 1;
+  }else if (strcmp(name, "closeimages") == 0) {
+    if(busyWindows == 1 ){
+      busyWindows = 0;
+      closeImage(currentWindows);
+    }
   }else{
     perror("-mpsh: no such intern command");
     return 1;
@@ -125,7 +125,7 @@ void printInviteShell(char *curr_dir){
   fprintf(stdout,"\n");
   
   if (busyWindows != 0 ) {
-      fprintf(stdout, "\033[01;34m %s \033[00m >>> ", currentWindows->path );
+      fprintf(stdout, "\033[01;34m %d \033[00m >>> ", currentWindows->id );
   }
   else{
     char str[BUF_LENGTH]= DEF_INVITE;
