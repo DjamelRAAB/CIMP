@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_video.h>
 #include <pwd.h>
 #include <unistd.h>
 #include "cli/cli.h"
@@ -18,14 +19,16 @@ void printInviteShell(char *curr_dir);
 /*-------------------------------------------------*/
 
 /* -------------- Variables Globale -------------- */
-int nbCommands = 2;
+int nbCommands = 3;
 formatCmd commands[] = { 
   {"openimages", 0, 0},
-  {"closeimages", 0,0}
+  {"closeimages", 0,0},
+  {"openfenetre", 1,0}
 };
 
 /* Une variable où on sauvegarde la fenêtre ouverte actuallement */
-windows fenetres[MAX_WINDOWS];
+windows *tabFenetres[MAX_WINDOWS];
+int posInTabFenetres = 0;
 windows *currentWindows;
 int result = 0, busyWindows = 0;	
 /*-------------------------------------------------*/
@@ -54,8 +57,8 @@ Quit:
     return status;
 }
 
-/*--------------------------------------------------------------------------*/
-
+/*------------------------------------ CLI --------------------------------------------*/
+/*-------------------------------------------------------------------------------------*/
 /* Fonction pour la lecture de la commande sur le shell */
 cmd *cmd_prompt(){
   char *curr_dir=malloc(BUF_LENGTH*sizeof(char));
@@ -76,56 +79,12 @@ cmd *cmd_prompt(){
   return c; // Retourner une commande structurée 
 }
 
-/* Vérifaication de la commande */
-short isCommand(char* text){
-  for(int i = 0;i < nbCommands;i++){
-    if(strcmp(text, commands[i].name) == 0){
-      return 1;
-    }
-  }
-  return 0;
-}
-
-
-/* Vérification des commandes */
-int exec_cmd(cmd* c){
-  if(isCommand(c->nameCmd)){
-    return execution(c);
-  }
-  else{
-    perror("Commandes introuvable");
-    return -1;
-  }
-}
-
-/* Éxecution des commandes */ 
-int execution(cmd* c){
-  char* name = c->nameCmd;
-  char** args = c->args;
-  int nb_args = c->nb_args;
-
-  if(strcmp(name, "openimages") == 0){
-    currentWindows = openImages(args[0]);
-    if( currentWindows != NULL)
-      busyWindows = 1;
-  }else if (strcmp(name, "closeimages") == 0) {
-    if(busyWindows == 1 ){
-      busyWindows = 0;
-      closeImage(currentWindows);
-    }
-  }else{
-    perror("-mpsh: no such intern command");
-    return 1;
-  }
-  return 0;
-}
-
 /* L'affichage de l'invite de commande */
 void printInviteShell(char *curr_dir){
   fprintf(stdout,"\n");
   
   if (busyWindows != 0 ) {
-      fprintf(stdout, "\033[01;34m %d \033[00m >>> ", currentWindows->id );
+      fprintf(stdout, "\033[01;34m %s \033[00m >>> ", currentWindows->path );
   }
   else{
     char str[BUF_LENGTH]= DEF_INVITE;
@@ -164,4 +123,63 @@ void printInviteShell(char *curr_dir){
 }
 
 
-/*--------------------------------------------------------------------------*/
+/*-------------------------------------------------------------------------------------*/
+/*-------------------------------------------------------------------------------------*/
+
+/*------------------------------- Traitement ------------------------------------------*/
+/*-------------------------------------------------------------------------------------*/
+
+/* Vérifaication de la commande */
+short isCommand(char* text){
+  for(int i = 0;i < nbCommands;i++){
+    if(strcmp(text, commands[i].name) == 0){
+      return 1;
+    }
+  }
+  return 0;
+}
+
+
+/* Vérification des commandes */
+int exec_cmd(cmd* c){
+  if(isCommand(c->nameCmd)){
+    return execution(c);
+  }
+  else{
+    perror("Commandes introuvable");
+    return -1;
+  }
+}
+
+/* Éxecution des commandes */ 
+int execution(cmd* c){
+  char* name = c->nameCmd;
+  char** args = c->args;
+  int nb_args = c->nb_args;
+
+  char *paths[] = { "assets/pictures/moto.bmp", "assets/pictures/moto2.bmp" };
+
+  if(strcmp(name, "openimages") == 0){ // Ouverture de images 
+    if( openImages(paths, 2, tabFenetres, &posInTabFenetres) != 0) {
+      fprintf(stdout, "Ouverture avec succces !!! posAct = %d ", posInTabFenetres);
+      currentWindows = tabFenetres[posInTabFenetres-1];
+      SDL_ShowWindow(currentWindows->fenetre);
+      busyWindows = 1;
+    }
+  }else if (strcmp(name, "closeimages") == 0) { // Fermeture des images
+    if(busyWindows == 1 ){
+      busyWindows = 0;
+      closeImage(&currentWindows);
+    }
+  }else if (strcmp(name, "openfenetre") == 0) { // Fermeture des images
+    SDL_ShowWindow(currentWindows->fenetre);
+  }else{
+    perror("-mpsh: no such intern command");
+    return 1;
+  }
+  return 0;
+}
+
+
+/*-------------------------------------------------------------------------------------*/
+/*-------------------------------------------------------------------------------------*/

@@ -12,40 +12,49 @@
  * 
 **/
 
-windows *openImages(const char path[]){
-    windows *w = initWindows(path);
-    SDL_Renderer *renderer = NULL;
-    SDL_Texture *textureImage = NULL;
-    SDL_Color blanc = {255, 255, 255, 255};
-    if( init(&(w->fenetre), &renderer, W, H) == -1  )
-        goto erreur;
-    SDL_SetWindowTitle(w->fenetre, w->path);
+int openImages(char *path[], int nbImages, windows *tabFenetres[], int *posCurrent){
+    int savePos = *posCurrent, success = 1;
+    for(int i = 0; i < nbImages && i < MAX_WINDOWS ; i++){
+        success = 1;
+        windows *w = initWindows(path[i]);
+        SDL_Texture *textureImage = NULL;
+        if( init(&(w->fenetre), &(w->renderer), W, H) == -1 ){
+            success = 0;
+            goto erreur;
+        }
+        SDL_SetWindowTitle(w->fenetre, w->path);
+        fprintf(stdout, "----Essaie Ouverture de l'image %s \n ", w->path );
+        textureImage = loadImage(w->path, (w->renderer));
+        if( textureImage == NULL){
+            success = 0;
+            goto erreur;
+        }
+        fprintf(stdout, " \t ---- Ouverture de l'image %s, sont identifiant est : %d \n ", w->path, *posCurrent );
+        SDL_RenderCopy(w->renderer, textureImage, NULL, NULL);
+        SDL_RenderPresent(w->renderer);
+        w->id = *posCurrent;
+        tabFenetres[i] = w;
+        (*posCurrent)++;
+        success = 1;
 
-    textureImage = loadImage(w->path, renderer);
-    if( textureImage == NULL){
-        goto erreur;
+        erreur:
+            if(textureImage != NULL && success == 0)
+                SDL_DestroyTexture(textureImage);   
+            if(w->renderer != NULL && success == 0)
+                SDL_DestroyRenderer(w->renderer);
+            if(NULL != w->fenetre && success == 0)
+                SDL_DestroyWindow(w->fenetre);
     }
-    setWindowColor(renderer, blanc);
-    SDL_RenderCopy(renderer, textureImage, NULL, NULL);
-    SDL_RenderPresent(renderer);
-    return w;
-
-erreur:
-    if(textureImage != NULL)
-        SDL_DestroyTexture(textureImage);   
-    if(renderer != NULL)
-        SDL_DestroyRenderer(renderer);
-    if(NULL != w->fenetre)
-        SDL_DestroyWindow(w->fenetre);
-    return NULL;
+    if(*posCurrent == savePos) return 0; 
+    else return 1;
 }
 
 /**
  * Fermeture de la fenêtre  
 **/
-void closeImage(windows *w){
-    SDL_DestroyWindow(w->fenetre);
-    free(w);
+void closeImage(windows **w){
+    SDL_DestroyRenderer( (*w)->renderer);
+    SDL_DestroyWindow( (*w)->fenetre);
 }
 
 

@@ -12,11 +12,13 @@
 
 typedef struct windows{
     SDL_Window *fenetre; // la fenetre en SDL2
+    SDL_Renderer *renderer; // Le renderer de la fenetre
     int id;              // l'identifiant de la fenetre
     SDL_Color color;     // la couleur du fond
     char formatImage[MAX_FORMAT];   // le format de l'image
     char path[MAX_PATH];          // le chemin de l'image
-    int reduite;         // La fenêtre est en arriere plan ou pas 
+    int reduite;         // La fenêtre est en arriere plan ou pas (0 non reduite 1 sinon ) 
+    int fermee;          // la fenêtre est fermée ou pas (0 non fermée 1 sinon )
 }windows;
 
 
