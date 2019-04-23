@@ -5,7 +5,7 @@
 #include "../windows/windows.h"
 #include "../shared/shared.h"
 #include "openSaveImages.h"
-#include <SDL2/SDL_image.h>
+
 
 /**
  * 
