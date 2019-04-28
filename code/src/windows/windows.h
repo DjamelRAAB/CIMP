@@ -36,4 +36,6 @@ windows *foundWindows(windows *w, int id);
 windows *deleteWindows(windows *w, int id);
 void printWindowsList(windows *n);
 
+int changerFenetre(windows *teteListe, dataWindows **currentWindows, int id);
+
 #endif

@@ -4,14 +4,18 @@
 #include <SDL2/SDL_video.h>
 #include <pwd.h>
 #include <unistd.h>
+
 #include "cli/cli.h"
 #include "cli/parsing.h"
 #include "shared/shared.h"
 #include "windows/windows.h"
+#include "../include/defaultValues.h"
 #include "minimale/openSaveImages.h"
+#include "minimale/select.h"
+#include "minimale/image_processing.h"
 
 /*---------------- Les Headers --------------------*/
-short isCommand(char* text);
+short isCommand(char* text, int nbArgs);
 cmd *cmd_prompt();
 int execution(cmd* c);
 int exec_cmd(cmd* c);
@@ -19,11 +23,14 @@ void printInviteShell(char *curr_dir);
 /*-------------------------------------------------*/
 
 /* -------------- Variables Globale -------------- */
-int nbCommands = 3;
+int nbCommands = 6;
 formatCmd commands[] = { 
-  {"openimages", 0, 0},
-  {"closeimages", 0,0},
-  {"openfenetre", 1,0}
+  {OPEN_IMAGES, MAX_ARGS, 1},
+  {CLOSE_IMAGES, MAX_ARGS, 1},
+  {BASCULER_FENETRE, 1,1},
+  {AFFICHER_LIST_FENETRES, 0, 0 },
+  {SAVE_IMAGES, 2, 0 },
+  {LOAD_IMAGE, 1, 1 }
 };
 
 /* Une variable où on sauvegarde la fenêtre ouverte actuallement */
@@ -130,10 +137,13 @@ void printInviteShell(char *curr_dir){
 /*-------------------------------------------------------------------------------------*/
 
 /* Vérifaication de la commande */
-short isCommand(char* text){
+short isCommand(char* text, int nbArgs){
   for(int i = 0;i < nbCommands;i++){
-    if(strcmp(text, commands[i].name) == 0){
-      return 1;
+    if(strcmp(text, commands[i].name) == 0 && ( nbArgs <= commands[i].nbArgs ) ){
+      if(nbArgs == 0 && commands[i].requiredArgs == 1)
+        return 0;
+      else 
+        return 1;
     }
   }
   return 0;
@@ -142,11 +152,11 @@ short isCommand(char* text){
 
 /* Vérification des commandes */
 int exec_cmd(cmd* c){
-  if(isCommand(c->nameCmd)){
+  if(isCommand(c->nameCmd, c->nb_args)){
     return execution(c);
   }
   else{
-    perror("Commandes introuvable");
+    fprintf(stdout, "\n >>>>>>>> la commande \033[31;01m \" %s \" \033[00m introuvable ou incorrecte \n ", c->nameCmd);
     return -1;
   }
 }
@@ -157,17 +167,16 @@ int execution(cmd* c){
   char** args = c->args;
   int nb_args = c->nb_args;
 
-  char *paths[] = { "assets/pictures/moto.bmp", "assets/pictures/moto2.bmp" };
+  char *paths[] = { "assets/pictures/moto.bmp", "assets/pictures/linux.png" };
 
-  if(strcmp(name, "openimages") == 0){ // Ouverture de images 
+  if(strcmp(name, OPEN_IMAGES) == 0){ // Ouverture de images 
     if( openImages(paths, 2, &listeWindows, &posInTabFenetres) != 0) {
-      printWindowsList(listeWindows);
-      fprintf(stdout, "Ouverture avec succces !!! posAct = %d ", posInTabFenetres);
       currentWindows = listeWindows->data;
       SDL_RaiseWindow(currentWindows->fenetre);
       busyWindows = 1;
     }
-  }else if (strcmp(name, "closeimages") == 0) { // Fermeture des images
+
+  }else if (strcmp(name, CLOSE_IMAGES) == 0) { // Fermeture des images
     if(busyWindows == 1 ){
       closeImage(&currentWindows);
       listeWindows = deleteWindows(listeWindows, currentWindows->id);
@@ -179,9 +188,36 @@ int execution(cmd* c){
     }
     else busyWindows = 0;
 
-  }else if (strcmp(name, "openfenetre") == 0) { // Fermeture des images
-    SDL_RaiseWindow(currentWindows->fenetre);
-  }else{
+  }else if (strcmp(name, BASCULER_FENETRE) == 0) { // BAsculer vers une images 
+    if ( busyWindows == 1){
+      changerFenetre(listeWindows, &currentWindows, atoi(args[0]));
+    }
+    else{
+      fprintf(stdout, ">>>>>>>>>>>> Erreur !!!");
+    }
+    
+  }else if (strcmp(name, SAVE_IMAGES) == 0) { // BAsculer vers une images 
+    if ( busyWindows == 1){
+      if(saveImage(currentWindows, "SAVE/savePicture","png")!=0){
+        fprintf(stderr, "Erreur saveImage : %s", SDL_GetError());
+      }
+    }
+    else{
+      fprintf(stdout, ">>>>>>>>>>>> Erreur !!!");
+    }
+  }else if (strcmp(name, LOAD_IMAGE) == 0) { // BAsculer vers une images 
+    if ( busyWindows == 1){
+      if(loadImageWindows(&listeWindows,&currentWindows,&posInTabFenetres, args[0], args[1])!=0){
+        fprintf(stderr, "Erreur saveImage : %s", SDL_GetError());
+      }
+    }
+    else{
+      fprintf(stdout, ">>>>>>>>>>>> Erreur !!!");
+    }
+  }else if (strcmp(name, AFFICHER_LIST_FENETRES) == 0) { // afficher la liste des fenetres
+    printWindowsList(listeWindows);
+  }
+  else{
     perror("-mpsh: no such intern command");
     return 1; 
   }

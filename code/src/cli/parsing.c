@@ -9,7 +9,7 @@ cmd *CreateCmd(char *str) {
     strcpy(saveStr, str);
 
     cmd* c = constListCmds(saveStr);
-    if( c != NULL){
+    /*if( c != NULL){
         printf("\n Parssing: cmd = %s , nbArgs = %d , args : ", c->nameCmd, c->nb_args );
         if((c->nb_args) > 0) {
             int j;
@@ -18,7 +18,7 @@ cmd *CreateCmd(char *str) {
             }
         }
     }
-    printf("\n");
+    printf("\n");*/
     return c;
 }
 

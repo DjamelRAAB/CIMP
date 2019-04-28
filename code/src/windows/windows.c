@@ -74,8 +74,6 @@ windows *deleteWindows(windows *w, int id){
     if (foundWindows(w, id) == NULL){
         return w;
     }
-        
-    
     windows *tmp, *saveTmp;
     if(w->data->id == id ){
         tmp = w->next;
@@ -111,4 +109,25 @@ void printWindowsList(windows *w){
 
         tmp = tmp->next;
     }
+}
+
+/**
+ * 
+**/
+int changerFenetre(windows *teteListe, dataWindows **currentWindows, int id){
+    if( teteListe == NULL || currentWindows == NULL ){
+        return 0;
+    }
+    windows *tmp = foundWindows(teteListe, id);
+    if(tmp == NULL){
+        fprintf(stdout, "incorrecte ID");
+        return 0;
+    }
+    (*currentWindows)->reduite = 1;
+    SDL_MinimizeWindow((*currentWindows)->fenetre);
+    *currentWindows = tmp->data;
+    SDL_RaiseWindow((*currentWindows)->fenetre);
+
+    return 1;
+
 }
