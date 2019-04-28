@@ -19,18 +19,9 @@ int openImages(char *path[], int nbImages, windows **tetelisteWindows, int *posC
         success = 1;
         dataWindows *w = initWindows(path[i]);
         SDL_Texture *textureImage = NULL;
- 
-        w->fenetre = SDL_CreateWindow(w->path, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, W, H, 0);
-        if( w->fenetre == NULL ){
-            success = 0;
-            goto erreur;
-        }
-        w->renderer = SDL_CreateRenderer(w->fenetre, -1, SDL_RENDERER_ACCELERATED);
-        if( w->renderer == NULL ){
-            success = 0;
-            goto erreur;
-        }
-
+        init(&w, W,H);
+        
+        SDL_SetWindowTitle(w->path);
         textureImage = loadImage(w->path, (w->renderer), 1);
         if( textureImage == NULL){
             success = 0;
@@ -150,15 +141,8 @@ int loadImageWindows(windows **listWindows, dataWindows **currentWindows,int *po
         dataWindows *w = initWindows(path);
         SDL_Texture *textureImage = NULL;
  
-        w->fenetre = SDL_CreateWindow(w->path, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, W, H, 0);
-        if( w->fenetre == NULL ){
-            return 0;
-        }
-        w->renderer = SDL_CreateRenderer(w->fenetre, -1, SDL_RENDERER_ACCELERATED);
-        if( w->renderer == NULL ){
-            SDL_DestroyWindow(w->fenetre);
-            return 0;
-        }
+        init(&w, W,H);
+
         textureImage = loadImage(path, w->renderer, 0);
         if( textureImage == NULL){
             return 0;

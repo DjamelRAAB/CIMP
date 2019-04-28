@@ -11,7 +11,7 @@ cimp: cimp.o shared.o cli.o parsing.o openSaveImages.o windows.o select.o image_
 
 cimp.o: src/cimp.c src/shared/shared.h src/cli/cli.h src/cli/parsing.h include/defaultValues.h
 	gcc $(CFLAGS) -o  $@ -c $< $(LDFLAGS)
-shared.o: src/shared/shared.c src/shared/shared.h
+shared.o: src/shared/shared.c src/shared/shared.h src/windows/windows.h
 	gcc $(CFLAGS) -o  $@ -c $<   $(LDFLAGS)
 cli.o: src/cli/cli.c src/cli/cli.h src/cli/parsing.h
 	gcc $(CFLAGS) -o  $@ -c $<  

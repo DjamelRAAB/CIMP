@@ -44,7 +44,7 @@ int main()
 { 
     int status = EXIT_FAILURE;
     cmd *c;
-    if(SDL_Init(SDL_INIT_VIDEO) != 0){
+    if(SDL_Init(SDL_INIT_EVERYTHING) != 0){
         fprintf(stderr, "Erreur SDL_Init : %s", SDL_GetError());
         goto Quit;
     }
