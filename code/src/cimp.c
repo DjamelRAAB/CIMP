@@ -27,9 +27,9 @@ formatCmd commands[] = {
 };
 
 /* Une variable où on sauvegarde la fenêtre ouverte actuallement */
-windows *tabFenetres[MAX_WINDOWS];
+windows *listeWindows = NULL;
 int posInTabFenetres = 0;
-windows *currentWindows;
+dataWindows *currentWindows;
 int result = 0, busyWindows = 0;	
 /*-------------------------------------------------*/
 
@@ -160,22 +160,30 @@ int execution(cmd* c){
   char *paths[] = { "assets/pictures/moto.bmp", "assets/pictures/moto2.bmp" };
 
   if(strcmp(name, "openimages") == 0){ // Ouverture de images 
-    if( openImages(paths, 2, tabFenetres, &posInTabFenetres) != 0) {
+    if( openImages(paths, 2, &listeWindows, &posInTabFenetres) != 0) {
+      printWindowsList(listeWindows);
       fprintf(stdout, "Ouverture avec succces !!! posAct = %d ", posInTabFenetres);
-      currentWindows = tabFenetres[posInTabFenetres-1];
-      SDL_ShowWindow(currentWindows->fenetre);
+      currentWindows = listeWindows->data;
+      SDL_RaiseWindow(currentWindows->fenetre);
       busyWindows = 1;
     }
   }else if (strcmp(name, "closeimages") == 0) { // Fermeture des images
     if(busyWindows == 1 ){
-      busyWindows = 0;
       closeImage(&currentWindows);
+      listeWindows = deleteWindows(listeWindows, currentWindows->id);
     }
+    if(listeWindows != NULL){
+      busyWindows = 1;
+      currentWindows = listeWindows->data;
+      SDL_RaiseWindow(currentWindows->fenetre);
+    }
+    else busyWindows = 0;
+
   }else if (strcmp(name, "openfenetre") == 0) { // Fermeture des images
-    SDL_ShowWindow(currentWindows->fenetre);
+    SDL_RaiseWindow(currentWindows->fenetre);
   }else{
     perror("-mpsh: no such intern command");
-    return 1;
+    return 1; 
   }
   return 0;
 }

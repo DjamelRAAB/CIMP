@@ -11,7 +11,7 @@
  * @return return 0 si tout se passe bien -1 si non
  **/
 int init(SDL_Window **window, SDL_Renderer **renderer, int w, int h){
-  if(SDL_CreateWindowAndRenderer(w, h, SDL_WINDOW_SHOWN, window, renderer) !=0 ){   
+  if(SDL_CreateWindowAndRenderer(w, h, SDL_WINDOW_MINIMIZED, window, renderer) !=0 ){   
     fprintf(stderr, "Erreur SDL_CreateWindowAndRenderer : %s", SDL_GetError());
     return -1;
   }

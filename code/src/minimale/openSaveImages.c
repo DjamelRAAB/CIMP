@@ -12,17 +12,24 @@
  * 
 **/
 
-int openImages(char *path[], int nbImages, windows *tabFenetres[], int *posCurrent){
+int openImages(char *path[], int nbImages, windows **tetelisteWindows, int *posCurrent){
     int savePos = *posCurrent, success = 1;
     for(int i = 0; i < nbImages && i < MAX_WINDOWS ; i++){
         success = 1;
-        windows *w = initWindows(path[i]);
+        dataWindows *w = initWindows(path[i]);
         SDL_Texture *textureImage = NULL;
-        if( init(&(w->fenetre), &(w->renderer), W, H) == -1 ){
+
+        w->fenetre = SDL_CreateWindow(w->path, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, W, H, 0);
+        if( w->fenetre == NULL ){
             success = 0;
             goto erreur;
         }
-        SDL_SetWindowTitle(w->fenetre, w->path);
+        w->renderer = SDL_CreateRenderer(w->fenetre, -1, SDL_RENDERER_ACCELERATED);
+        if( w->renderer == NULL ){
+            success = 0;
+            goto erreur;
+        }
+
         fprintf(stdout, "----Essaie Ouverture de l'image %s \n ", w->path );
         textureImage = loadImage(w->path, (w->renderer));
         if( textureImage == NULL){
@@ -33,9 +40,11 @@ int openImages(char *path[], int nbImages, windows *tabFenetres[], int *posCurre
         SDL_RenderCopy(w->renderer, textureImage, NULL, NULL);
         SDL_RenderPresent(w->renderer);
         w->id = *posCurrent;
-        tabFenetres[i] = w;
+        *tetelisteWindows = addWindows(*tetelisteWindows, w);
         (*posCurrent)++;
         success = 1;
+
+        SDL_MinimizeWindow(w->fenetre);
 
         erreur:
             if(textureImage != NULL && success == 0)
@@ -52,7 +61,7 @@ int openImages(char *path[], int nbImages, windows *tabFenetres[], int *posCurre
 /**
  * Fermeture de la fenêtre  
 **/
-void closeImage(windows **w){
+void closeImage(dataWindows **w){
     SDL_DestroyRenderer( (*w)->renderer);
     SDL_DestroyWindow( (*w)->fenetre);
 }
