@@ -29,7 +29,7 @@ int main(void){
   SDL_Texture *texture_image = NULL;
   int statut = EXIT_FAILURE;
   SDL_Color c = {0,0,0,0};
-  enum Processing act = ADD_FRAMING ;
+  enum Processing act = BLURRED;
   SDL_Rect rect;
 
   if(init(&window, &renderer, w, h) != 0){

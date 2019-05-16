@@ -1,4 +1,10 @@
+<<<<<<< HEAD
 JOURNAL_DR
 main
 *vscode*
 savePicture.png
+=======
+.vscode
+main
+*.o
+>>>>>>> 37940c53be4d116e3b420715d484446a17df14b9
