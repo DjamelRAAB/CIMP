@@ -23,28 +23,35 @@ void printInviteShell(char *curr_dir);
 /*-------------------------------------------------*/
 
 /* -------------- Variables Globale -------------- */
-int nbCommands = 6;
+int nbCommands = 12;
 formatCmd commands[] = { 
   {OPEN_IMAGES, MAX_ARGS, 1},
   {CLOSE_IMAGES, MAX_ARGS, 1},
   {BASCULER_FENETRE, 1,1},
   {AFFICHER_LIST_FENETRES, 0, 0 },
   {SAVE_IMAGES, 2, 0 },
-  {LOAD_IMAGE, 1, 1 }
+  {LOAD_IMAGE, 1, 1 },
+  {NEGATIVE_EFFECT, 0, 0},
+  {GREY_EFFECT, 0, 0},
+  {NOIRBLAN, 0, 0},
+  {BRIGHTNESS_EFFECT, 0, 0},
+  {ROTATION_LEFT, 0, 0},
+  {ROTATION_RIGHT, 0, 0}
 };
 
 /* Une variable où on sauvegarde la fenêtre ouverte actuallement */
 windows *listeWindows = NULL;
 int posInTabFenetres = 0;
 dataWindows *currentWindows;
-int result = 0, busyWindows = 0;	
+int result = 0, busyWindows = 0;
+SDL_Rect zoneSelection;	
 /*-------------------------------------------------*/
 
 int main()
 { 
     int status = EXIT_FAILURE;
     cmd *c;
-    if(SDL_Init(SDL_INIT_EVERYTHING) != 0){
+    if(SDL_Init(SDL_INIT_VIDEO) != 0){
         fprintf(stderr, "Erreur SDL_Init : %s", SDL_GetError());
         goto Quit;
     }
@@ -132,7 +139,6 @@ void printInviteShell(char *curr_dir){
 
 /*-------------------------------------------------------------------------------------*/
 /*-------------------------------------------------------------------------------------*/
-
 /*------------------------------- Traitement ------------------------------------------*/
 /*-------------------------------------------------------------------------------------*/
 
@@ -167,12 +173,11 @@ int execution(cmd* c){
   char** args = c->args;
   int nb_args = c->nb_args;
 
-  char *paths[] = { "assets/pictures/moto.bmp", "assets/pictures/linux.png" };
+  char *paths[] = { "assets/pictures/moto.bmp"};
 
   if(strcmp(name, OPEN_IMAGES) == 0){ // Ouverture de images 
-    if( openImages(paths, 2, &listeWindows, &posInTabFenetres) != 0) {
+    if( openImages(paths, 1, &listeWindows, &posInTabFenetres) != 0) {
       currentWindows = listeWindows->data;
-      SDL_RaiseWindow(currentWindows->fenetre);
       busyWindows = 1;
     }
 
@@ -188,7 +193,7 @@ int execution(cmd* c){
     }
     else busyWindows = 0;
 
-  }else if (strcmp(name, BASCULER_FENETRE) == 0) { // BAsculer vers une images 
+  }else if (strcmp(name, BASCULER_FENETRE) == 0) { // Basculer vers une fenetre
     if ( busyWindows == 1){
       changerFenetre(listeWindows, &currentWindows, atoi(args[0]));
     }
@@ -196,7 +201,7 @@ int execution(cmd* c){
       fprintf(stdout, ">>>>>>>>>>>> Erreur !!!");
     }
     
-  }else if (strcmp(name, SAVE_IMAGES) == 0) { // BAsculer vers une images 
+  }else if (strcmp(name, SAVE_IMAGES) == 0) { // sauvegarder  une image 
     if ( busyWindows == 1){
       if(saveImage(currentWindows, "SAVE/savePicture","png")!=0){
         fprintf(stderr, "Erreur saveImage : %s", SDL_GetError());
@@ -205,7 +210,7 @@ int execution(cmd* c){
     else{
       fprintf(stdout, ">>>>>>>>>>>> Erreur !!!");
     }
-  }else if (strcmp(name, LOAD_IMAGE) == 0) { // BAsculer vers une images 
+  }else if (strcmp(name, LOAD_IMAGE) == 0) { // chargement d'une image 
     if ( busyWindows == 1){
       if(loadImageWindows(&listeWindows,&currentWindows,&posInTabFenetres, args[0], args[1])!=0){
         fprintf(stderr, "Erreur saveImage : %s", SDL_GetError());
@@ -216,8 +221,43 @@ int execution(cmd* c){
     }
   }else if (strcmp(name, AFFICHER_LIST_FENETRES) == 0) { // afficher la liste des fenetres
     printWindowsList(listeWindows);
-  }
-  else{
+  }else if (strcmp(name, NEGATIVE_EFFECT) == 0){ // Rendre une image négative
+    if ( busyWindows == 1){
+      SDL_Rect rect;
+      SDL_RenderGetViewport(currentWindows->renderer, &rect);
+      negativeEffect(&currentWindows, &rect);
+    }
+  }else if (strcmp(name, GREY_EFFECT) == 0 ){ // la mise en niveaux gris d'une image ou de la sélection courante
+    if ( busyWindows == 1){
+      SDL_Rect rect;
+      SDL_RenderGetViewport(currentWindows->renderer, &rect);
+      imageProcessing(&currentWindows->renderer, &rect, currentWindows->color, GREY);
+    }
+  }else if( strcmp(name, NOIRBLAN) == 0){ // la mise en noir et blanc d'une image ou de la sélection courante
+    if ( busyWindows == 1){
+      SDL_Rect rect;
+      SDL_RenderGetViewport(currentWindows->renderer, &rect);
+      imageProcessing(&currentWindows->renderer, &rect, currentWindows->color, NEGATIVE);
+    }
+  }else if(strcmp(name, BRIGHTNESS_EFFECT) == 0){
+    if ( busyWindows == 1){
+      SDL_Rect rect;
+      SDL_RenderGetViewport(currentWindows->renderer, &rect);
+      imageProcessing(&currentWindows->renderer, &rect, currentWindows->color, BRIGHTNESS);
+    }
+  }else if(strcmp(name, ROTATION_LEFT) == 0){
+    if ( busyWindows == 1){
+      SDL_Rect rect;
+      SDL_RenderGetViewport(currentWindows->renderer, &rect);
+      imageProcessing(&currentWindows->renderer, &rect, currentWindows->color, LEFT_ROTATION);
+    }
+  }else if(strcmp(name, ROTATION_RIGHT) == 0){
+    if ( busyWindows == 1){
+      SDL_Rect rect;
+      SDL_RenderGetViewport(currentWindows->renderer, &rect);
+      imageProcessing(&currentWindows->renderer, &rect, currentWindows->color, RIGHT_ROTATION);
+    }
+  }else{
     perror("-mpsh: no such intern command");
     return 1; 
   }

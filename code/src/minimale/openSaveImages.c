@@ -21,7 +21,7 @@ int openImages(char *path[], int nbImages, windows **tetelisteWindows, int *posC
         SDL_Texture *textureImage = NULL;
         init(&w, W,H);
         
-        SDL_SetWindowTitle(w->path);
+        SDL_SetWindowTitle(w->fenetre,w->path);
         textureImage = loadImage(w->path, (w->renderer), 1);
         if( textureImage == NULL){
             success = 0;
@@ -34,7 +34,7 @@ int openImages(char *path[], int nbImages, windows **tetelisteWindows, int *posC
         (*posCurrent)++;
         success = 1;
 
-        SDL_MinimizeWindow(w->fenetre);
+        //SDL_MinimizeWindow(w->fenetre);
 
         erreur:
             if(textureImage != NULL && success == 0)
@@ -87,7 +87,7 @@ SDL_Texture *loadImage(const char path[], SDL_Renderer *renderer, int boolAlpha)
     SDL_FreeSurface(tmp);
 
     if(texture == NULL){
-        fprintf(stderr, "Erreur SDL_CreateTextureFromSurface : %s", SDL_GetError());
+        fprintf(stderr, "Echec de chargement: %s", SDL_GetError());
         return NULL;
     }
 

@@ -49,10 +49,10 @@ Uint32 flouPixel(Uint32 * pixels, SDL_Rect *rect ,int i, int j, int n){
   for (i = initial_h; i < final_h; i++)
     for(j = initial_w; j < final_w; j++)
       {
-	SDL_GetRGBA(pixels[i * rect->w + j],SDL_AllocFormat(SDL_PIXELFORMAT_RGBA8888) , &color.r, &color.g, &color.b,&color.a);
-	sum_r += color.r;
-	sum_g += color.g;
-	sum_b += color.b;
+        SDL_GetRGBA(pixels[i * rect->w + j],SDL_AllocFormat(SDL_PIXELFORMAT_RGBA8888) , &color.r, &color.g, &color.b,&color.a);
+        sum_r += color.r;
+        sum_g += color.g;
+        sum_b += color.b;
       }
   return SDL_MapRGBA(SDL_AllocFormat(SDL_PIXELFORMAT_RGBA8888), sum_r / nb_pixel, sum_g / nb_pixel, sum_b / nb_pixel, color.a);
 }
@@ -65,7 +65,7 @@ Uint32 flouPixel(Uint32 * pixels, SDL_Rect *rect ,int i, int j, int n){
  * @param act : l'action a faire sur la selection.
  * @return retourne 0 si tout c'est bien passer 1 si non. 
  **/
-int imageProcessing (SDL_Renderer *renderer , SDL_Rect *rect , SDL_Color c , enum Processing act){  
+int imageProcessing (SDL_Renderer **renderer, SDL_Rect *rect , SDL_Color c , enum Processing act){  
   int i , j ,n = 2;
   int pitch ;
   double angle ;
@@ -89,15 +89,15 @@ int imageProcessing (SDL_Renderer *renderer , SDL_Rect *rect , SDL_Color c , enu
     return 1;
   }
 
-  texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_STATIC, rect->w, rect->h );
+  texture = SDL_CreateTexture(*renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_STATIC, rect->w, rect->h );
   if(texture == NULL){
     free(pixels);
     free(pixels2);
     return 1;
   }
 
-  getPixels(renderer , rect , pixels );
-  getPixels(renderer , rect , pixels2 );
+  getPixels(*renderer , rect , pixels );
+  getPixels(*renderer , rect , pixels2 );
 
   SDL_SetTextureBlendMode(texture, SDL_BLENDMODE_BLEND);
   format = SDL_AllocFormat(SDL_PIXELFORMAT_RGBA8888);
@@ -115,9 +115,9 @@ int imageProcessing (SDL_Renderer *renderer , SDL_Rect *rect , SDL_Color c , enu
   case GREY:
     for(i = 0; i < rect->h; i++){
       for(j = 0; j < rect->w; j++){
-	SDL_GetRGBA(pixels[i * rect->w + j], format, &tmp.r, &tmp.g, &tmp.b , &tmp.a );
-	Uint8 gris = (tmp.r + tmp.g + tmp.b) / 3;
-	pixels[i * rect->w + j] = SDL_MapRGBA(format, gris, gris, gris ,tmp.a);
+        SDL_GetRGBA(pixels[i * rect->w + j], format, &tmp.r, &tmp.g, &tmp.b , &tmp.a );
+        Uint8 gris = (tmp.r + tmp.g + tmp.b) / 3;
+        pixels[i * rect->w + j] = SDL_MapRGBA(format, gris, gris, gris ,tmp.a);
       }
     }
     break;
@@ -125,8 +125,8 @@ int imageProcessing (SDL_Renderer *renderer , SDL_Rect *rect , SDL_Color c , enu
   case NEGATIVE:
     for(i = 0; i < rect->h; i++){
       for(j = 0; j < rect->w; j++){
-	SDL_GetRGBA(pixels[i * rect->w + j], format, &tmp.r, &tmp.g, &tmp.b , &tmp.a );
-	pixels[i * rect->w + j] = SDL_MapRGBA(format, 255-tmp.r, 255-tmp.g, 255-tmp.b ,tmp.a);
+        SDL_GetRGBA(pixels[i * rect->w + j], format, &tmp.r, &tmp.g, &tmp.b , &tmp.a );
+        pixels[i * rect->w + j] = SDL_MapRGBA(format, 255-tmp.r, 255-tmp.g, 255-tmp.b ,tmp.a);
       }    
     }
     break;
@@ -134,11 +134,11 @@ int imageProcessing (SDL_Renderer *renderer , SDL_Rect *rect , SDL_Color c , enu
   case BRIGHTNESS:
     for(i = 0; i < rect->h; i++){
       for(j = 0; j < rect->w; j++){
-	SDL_GetRGBA(pixels[i * rect->w + j], format, &tmp.r, &tmp.g, &tmp.b , &tmp.a );
-	tmp.r = fBRIGHTNESS(tmp.r, n);
-	tmp.g = fBRIGHTNESS(tmp.g, n);
-	tmp.b = fBRIGHTNESS(tmp.b, n);
-	pixels[i * rect->w + j] = SDL_MapRGBA(format, tmp.r, tmp.g, tmp.b ,tmp.a);
+        SDL_GetRGBA(pixels[i * rect->w + j], format, &tmp.r, &tmp.g, &tmp.b , &tmp.a );
+        tmp.r = fBRIGHTNESS(tmp.r, n);
+        tmp.g = fBRIGHTNESS(tmp.g, n);
+        tmp.b = fBRIGHTNESS(tmp.b, n);
+        pixels[i * rect->w + j] = SDL_MapRGBA(format, tmp.r, tmp.g, tmp.b ,tmp.a);
       }
     }  
     break;
@@ -146,11 +146,11 @@ int imageProcessing (SDL_Renderer *renderer , SDL_Rect *rect , SDL_Color c , enu
   case ADD_CONTRAST:
     for(i = 0; i < rect->h; i++){
       for(j = 0; j < rect->w; j++){
-	SDL_GetRGBA(pixels[i * rect->w + j], format, &tmp.r, &tmp.g, &tmp.b , &tmp.a );
-	tmp.r = fContrast(tmp.r, n);
-	tmp.g = fContrast(tmp.g, n);
-	tmp.b = fContrast(tmp.b, n);
-	pixels[i * rect->w + j] = SDL_MapRGBA(format, tmp.r, tmp.g, tmp.b ,tmp.a); 
+      SDL_GetRGBA(pixels[i * rect->w + j], format, &tmp.r, &tmp.g, &tmp.b , &tmp.a );
+      tmp.r = fContrast(tmp.r, n);
+      tmp.g = fContrast(tmp.g, n);
+      tmp.b = fContrast(tmp.b, n);
+      pixels[i * rect->w + j] = SDL_MapRGBA(format, tmp.r, tmp.g, tmp.b ,tmp.a); 
       }
     }
     break;
@@ -158,11 +158,11 @@ int imageProcessing (SDL_Renderer *renderer , SDL_Rect *rect , SDL_Color c , enu
   case SUB_CONTRAST:
     for(i = 0; i < rect->h; i++){
       for(j = 0; j < rect->w; j++){
-	SDL_GetRGBA(pixels[i * rect->w + j], format, &tmp.r, &tmp.g, &tmp.b , &tmp.a );
-	tmp.r = fContrast(tmp.r, -n);
-	tmp.g = fContrast(tmp.g, -n);
-	tmp.b = fContrast(tmp.b, -n);
-	pixels[i * rect->w + j] = SDL_MapRGBA(format, tmp.r, tmp.g, tmp.b ,tmp.a);  
+      SDL_GetRGBA(pixels[i * rect->w + j], format, &tmp.r, &tmp.g, &tmp.b , &tmp.a );
+      tmp.r = fContrast(tmp.r, -n);
+      tmp.g = fContrast(tmp.g, -n);
+      tmp.b = fContrast(tmp.b, -n);
+      pixels[i * rect->w + j] = SDL_MapRGBA(format, tmp.r, tmp.g, tmp.b ,tmp.a);  
       }
     }
     break;
@@ -180,10 +180,10 @@ int imageProcessing (SDL_Renderer *renderer , SDL_Rect *rect , SDL_Color c , enu
 
     for(i = 0; i < rect->h; i++){
       for(j = 0; j < rect->w; j++){
-	if(i==0||i==rect->h-1||j==0||j==rect->w-1){
-//	  SDL_GetRGBA(pixels[i * rect->w + j], format, &tmp.r, &tmp.g, &tmp.b , &tmp.a );
-	  pixels2[i * rect->w + j] = 255 - SDL_abs(pixels[i * rect->w + j] - flouPixel(pixels,rect,i,j,n));
-	}
+        if(i==0||i==rect->h-1||j==0||j==rect->w-1){
+      //	  SDL_GetRGBA(pixels[i * rect->w + j], format, &tmp.r, &tmp.g, &tmp.b , &tmp.a );
+          pixels2[i * rect->w + j] = 255 - SDL_abs(pixels[i * rect->w + j] - flouPixel(pixels,rect,i,j,n));
+        }
       }
     }
     break;                              
@@ -211,10 +211,10 @@ int imageProcessing (SDL_Renderer *renderer , SDL_Rect *rect , SDL_Color c , enu
     angle = 0 ;
     flip = SDL_FLIP_NONE;
     SDL_Rect fRect;
-    SDL_RenderGetViewport(renderer, &fRect);//on récupère la zone de travaille dans rect
+    SDL_RenderGetViewport(*renderer, &fRect);//on récupère la zone de travaille dans rect
     rect->x= (fRect.w-rect->w)/2;
     rect->y= (fRect.h-rect->h)/2;
-    SDL_RenderClear(renderer);
+    SDL_RenderClear(*renderer);
     
     break;
   default:
@@ -227,34 +227,71 @@ int imageProcessing (SDL_Renderer *renderer , SDL_Rect *rect , SDL_Color c , enu
 
   if(act==CLIPPING || act==BLURRED){
     SDL_UpdateTexture(texture, NULL, pixels2, sizeof(Uint32) * rect->w);
-    SDL_RenderCopy(renderer, texture, NULL, rect);
+    SDL_RenderCopy(*renderer, texture, NULL, rect);
   }
     if(act== GREY ||act == FILLING|| act == NEGATIVE || act == BRIGHTNESS || act == ADD_CONTRAST || act == SUB_CONTRAST ){
     SDL_UpdateTexture(texture, NULL, pixels, sizeof(Uint32) * rect->w);
-    SDL_RenderCopy(renderer, texture, NULL, rect);
+    SDL_RenderCopy(*renderer, texture, NULL, rect);
   }
 
   if (act == LEFT_ROTATION || act == RIGHT_ROTATION || act == FLIP_HORIZONTAL || act == FLIP_VERTICAL){
     /* à ameloirer */
     SDL_UpdateTexture(texture, NULL, pixels, sizeof(Uint32) * rect->w);
-    SDL_RenderCopyEx(renderer,texture,NULL,rect,angle,NULL,flip);
+    SDL_RenderCopyEx(*renderer,texture,NULL,rect,angle,NULL,flip);
   }
   if (act ==SUB_FRAMING){
     SDL_UpdateTexture(texture, NULL, pixels, sizeof(Uint32) * rect->w);
-    SDL_RenderCopy(renderer, texture, rect, NULL);
+    SDL_RenderCopy(*renderer, texture, rect, NULL);
   } 
 
   if (act==ADD_FRAMING){
-    SDL_RenderPresent(renderer);
+    SDL_RenderPresent(*renderer);
     SDL_UpdateTexture(texture, NULL, pixels, sizeof(Uint32) * rect->w);
-    SDL_RenderCopy(renderer, texture, NULL, rect);
+    SDL_RenderCopy(*renderer, texture, NULL, rect);
   } 
 
-  SDL_RenderPresent(renderer);
-  SDL_Delay(1000);
+  SDL_RenderPresent(*renderer);
 
   SDL_DestroyTexture(texture);
   free(pixels);
   free(pixels2);
   return 0 ;
+}
+
+
+int negativeEffect(dataWindows **w, SDL_Rect *rect){
+  int pitch;
+  Uint32 *pixels;
+  SDL_PixelFormat *format;
+  SDL_Texture *texture;
+  SDL_Color tmp;
+
+  pitch = sizeof(Uint32) * rect->w;
+  pixels = malloc(pitch * rect->h);
+
+  texture = SDL_CreateTexture((*w)->renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_STATIC, rect->w, rect->h );
+  if(texture == NULL){
+    free(pixels);
+    return 1;
+  }
+  getPixels((*w)->renderer, rect , pixels);
+  format = SDL_AllocFormat(SDL_PIXELFORMAT_RGBA8888);
+
+  for(int i = 0; i < rect->h; i++){
+    for(int j = 0; j < rect->w; j++){
+      SDL_GetRGBA(pixels[i * rect->w + j], format, &tmp.r, &tmp.g, &tmp.b , &tmp.a );
+      pixels[i * rect->w + j] = SDL_MapRGBA(format, 255-tmp.r, 255-tmp.g, 255-tmp.b ,tmp.a);
+    }    
+  }
+
+  SDL_FreeFormat(format);
+  SDL_UpdateTexture(texture, NULL, pixels, sizeof(Uint32) * rect->w);
+  SDL_RenderCopy((*w)->renderer, texture, NULL, rect);
+  
+  //SDL_RenderPresent((*w)->renderer);
+
+  SDL_DestroyTexture(texture);
+  free(pixels);
+
+  return 0;
 }

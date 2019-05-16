@@ -9,7 +9,7 @@
 **/
 
 dataWindows *initWindows(const char path[]){
-    SDL_Color defaultColor = {255,255,0,0}; 
+    SDL_Color defaultColor = {0,0,0,0}; 
     SDL_Window *f = NULL;
     SDL_Renderer *r = NULL;
 
@@ -105,7 +105,7 @@ void printWindowsList(windows *w){
     windows *tmp = w;
     while(tmp != NULL){
         
-        printf("\n images = %s ==========> id = %d  \n", tmp->data->path ,tmp->data->id);
+        printf("\n image = %s ==========> id = %d  \n", tmp->data->path ,tmp->data->id);
 
         tmp = tmp->next;
     }

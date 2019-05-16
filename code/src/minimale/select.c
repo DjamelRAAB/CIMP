@@ -137,7 +137,7 @@ SDL_Texture * copier(SDL_Renderer *renderer , SDL_Rect *rect ){
 SDL_Texture * couper(SDL_Renderer *renderer , SDL_Rect *rect , SDL_Color color){
   SDL_Texture *texture = copier(renderer , rect );
   enum Processing act = FILLING ;
-  imageProcessing (renderer , rect , color , act);
+  imageProcessing (&renderer , rect , color , act);
   return texture;
 }
 
