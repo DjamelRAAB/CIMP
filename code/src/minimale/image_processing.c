@@ -120,6 +120,7 @@ int imageProcessing (SDL_Renderer **renderer, SDL_Rect *rect , SDL_Color c , enu
         pixels[i * rect->w + j] = SDL_MapRGBA(format, gris, gris, gris ,tmp.a);
       }
     }
+    printf("grey");
     break;
 
   case NEGATIVE:
@@ -129,6 +130,7 @@ int imageProcessing (SDL_Renderer **renderer, SDL_Rect *rect , SDL_Color c , enu
         pixels[i * rect->w + j] = SDL_MapRGBA(format, 255-tmp.r, 255-tmp.g, 255-tmp.b ,tmp.a);
       }
     }
+    printf("neg");
     break;
 
   case BRIGHTNESS:

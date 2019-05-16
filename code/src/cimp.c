@@ -221,12 +221,13 @@ int execution(cmd* c){
     }
   }else if (strcmp(name, AFFICHER_LIST_FENETRES) == 0) { // afficher la liste des fenetres
     printWindowsList(listeWindows);
-  }else if (strcmp(name, NEGATIVE_EFFECT) == 0){ // Rendre une image négative
+  }
+  else if (strcmp(name, NEGATIVE_EFFECT) == 0){ // Rendre une image négative
     if ( busyWindows == 1){
       SDL_Rect rect;
       SDL_RenderGetViewport(currentWindows->renderer, &rect);
       imageProcessing(&currentWindows->renderer, &rect, currentWindows->color, NEGATIVE);
-      imageProcessing(&currentWindows->renderer, &rect, currentWindows->color, NEGATIVE);
+     // imageProcessing(&currentWindows->renderer, &rect, currentWindows->color, NEGATIVE);
       //SDL_RenderPresent(currentWindows->renderer);
     }
   }else if (strcmp(name, GREY_EFFECT) == 0 ){ // la mise en niveaux gris d'une image ou de la sélection courante
@@ -234,7 +235,7 @@ int execution(cmd* c){
       SDL_Rect rect;
       SDL_RenderGetViewport(currentWindows->renderer, &rect);
       imageProcessing(&currentWindows->renderer, &rect, currentWindows->color, GREY);
-      imageProcessing(&currentWindows->renderer, &rect, currentWindows->color, GREY);
+    //  imageProcessing(&currentWindows->renderer, &rect, currentWindows->color, GREY);
     }
   }else if( strcmp(name, NOIRBLAN) == 0){ // la mise en noir et blanc d'une image ou de la sélection courante
     if ( busyWindows == 1){

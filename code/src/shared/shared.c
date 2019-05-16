@@ -15,7 +15,7 @@ int init(dataWindows **windows, int w, int h){
     fprintf(stderr, "Erreur SDL_CreateWindowAndRenderer : %s", SDL_GetError());
     return 0;
   }
-  (*windows)->renderer = SDL_CreateRenderer((*windows)->fenetre, -1, SDL_RENDERER_ACCELERATED);
+  (*windows)->renderer = SDL_CreateRenderer((*windows)->fenetre, -1, 0);
   if( (*windows)->renderer == NULL ){
     SDL_DestroyWindow((*windows)->fenetre);
     fprintf(stderr, "Erreur SDL_CreateWindowAndRenderer : %s", SDL_GetError());
