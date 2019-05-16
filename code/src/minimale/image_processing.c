@@ -127,7 +127,7 @@ int imageProcessing (SDL_Renderer **renderer, SDL_Rect *rect , SDL_Color c , enu
       for(j = 0; j < rect->w; j++){
         SDL_GetRGBA(pixels[i * rect->w + j], format, &tmp.r, &tmp.g, &tmp.b , &tmp.a );
         pixels[i * rect->w + j] = SDL_MapRGBA(format, 255-tmp.r, 255-tmp.g, 255-tmp.b ,tmp.a);
-      }    
+      }
     }
     break;
 
@@ -177,7 +177,6 @@ int imageProcessing (SDL_Renderer **renderer, SDL_Rect *rect , SDL_Color c , enu
     break;                              
 
   case CLIPPING:
-
     for(i = 0; i < rect->h; i++){
       for(j = 0; j < rect->w; j++){
         if(i==0||i==rect->h-1||j==0||j==rect->w-1){
@@ -229,7 +228,7 @@ int imageProcessing (SDL_Renderer **renderer, SDL_Rect *rect , SDL_Color c , enu
     SDL_UpdateTexture(texture, NULL, pixels2, sizeof(Uint32) * rect->w);
     SDL_RenderCopy(*renderer, texture, NULL, rect);
   }
-    if(act== GREY ||act == FILLING|| act == NEGATIVE || act == BRIGHTNESS || act == ADD_CONTRAST || act == SUB_CONTRAST ){
+  if(act== GREY ||act == FILLING|| act == NEGATIVE || act == BRIGHTNESS || act == ADD_CONTRAST || act == SUB_CONTRAST ){
     SDL_UpdateTexture(texture, NULL, pixels, sizeof(Uint32) * rect->w);
     SDL_RenderCopy(*renderer, texture, NULL, rect);
   }
@@ -255,11 +254,12 @@ int imageProcessing (SDL_Renderer **renderer, SDL_Rect *rect , SDL_Color c , enu
   SDL_DestroyTexture(texture);
   free(pixels);
   free(pixels2);
+  
   return 0 ;
 }
 
 
-int negativeEffect(dataWindows **w, SDL_Rect *rect){
+int LuminositeEffect(dataWindows **w, SDL_Rect *rect, int n){
   int pitch;
   Uint32 *pixels;
   SDL_PixelFormat *format;
@@ -280,15 +280,18 @@ int negativeEffect(dataWindows **w, SDL_Rect *rect){
   for(int i = 0; i < rect->h; i++){
     for(int j = 0; j < rect->w; j++){
       SDL_GetRGBA(pixels[i * rect->w + j], format, &tmp.r, &tmp.g, &tmp.b , &tmp.a );
-      pixels[i * rect->w + j] = SDL_MapRGBA(format, 255-tmp.r, 255-tmp.g, 255-tmp.b ,tmp.a);
-    }    
-  }
+      tmp.r = fBRIGHTNESS(tmp.r, n);
+      tmp.g = fBRIGHTNESS(tmp.g, n);
+      tmp.b = fBRIGHTNESS(tmp.b, n);
+      pixels[i * rect->w + j] = SDL_MapRGBA(format, tmp.r, tmp.g, tmp.b ,tmp.a);
+    }
+  }  
 
   SDL_FreeFormat(format);
   SDL_UpdateTexture(texture, NULL, pixels, sizeof(Uint32) * rect->w);
   SDL_RenderCopy((*w)->renderer, texture, NULL, rect);
-  
-  //SDL_RenderPresent((*w)->renderer);
+
+  SDL_RenderPresent((*w)->renderer);
 
   SDL_DestroyTexture(texture);
   free(pixels);

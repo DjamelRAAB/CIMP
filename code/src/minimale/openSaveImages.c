@@ -9,10 +9,8 @@
 #include "openSaveImages.h"
 
 /**
- * 
- * 
+ * Ouvrir les images
 **/
-
 int openImages(char *path[], int nbImages, windows **tetelisteWindows, int *posCurrent){
     int savePos = *posCurrent, success = 1;
     for(int i = 0; i < nbImages && i < MAX_WINDOWS ; i++){

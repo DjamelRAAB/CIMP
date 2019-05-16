@@ -34,7 +34,7 @@ formatCmd commands[] = {
   {NEGATIVE_EFFECT, 0, 0},
   {GREY_EFFECT, 0, 0},
   {NOIRBLAN, 0, 0},
-  {BRIGHTNESS_EFFECT, 0, 0},
+  {BRIGHTNESS_EFFECT, 1, 1},
   {ROTATION_LEFT, 0, 0},
   {ROTATION_RIGHT, 0, 0}
 };
@@ -225,12 +225,15 @@ int execution(cmd* c){
     if ( busyWindows == 1){
       SDL_Rect rect;
       SDL_RenderGetViewport(currentWindows->renderer, &rect);
-      negativeEffect(&currentWindows, &rect);
+      imageProcessing(&currentWindows->renderer, &rect, currentWindows->color, NEGATIVE);
+      imageProcessing(&currentWindows->renderer, &rect, currentWindows->color, NEGATIVE);
+      //SDL_RenderPresent(currentWindows->renderer);
     }
   }else if (strcmp(name, GREY_EFFECT) == 0 ){ // la mise en niveaux gris d'une image ou de la sélection courante
     if ( busyWindows == 1){
       SDL_Rect rect;
       SDL_RenderGetViewport(currentWindows->renderer, &rect);
+      imageProcessing(&currentWindows->renderer, &rect, currentWindows->color, GREY);
       imageProcessing(&currentWindows->renderer, &rect, currentWindows->color, GREY);
     }
   }else if( strcmp(name, NOIRBLAN) == 0){ // la mise en noir et blanc d'une image ou de la sélection courante
@@ -238,23 +241,27 @@ int execution(cmd* c){
       SDL_Rect rect;
       SDL_RenderGetViewport(currentWindows->renderer, &rect);
       imageProcessing(&currentWindows->renderer, &rect, currentWindows->color, NEGATIVE);
+      imageProcessing(&currentWindows->renderer, &rect, currentWindows->color, NEGATIVE);
     }
   }else if(strcmp(name, BRIGHTNESS_EFFECT) == 0){
     if ( busyWindows == 1){
       SDL_Rect rect;
       SDL_RenderGetViewport(currentWindows->renderer, &rect);
-      imageProcessing(&currentWindows->renderer, &rect, currentWindows->color, BRIGHTNESS);
-    }
+      LuminositeEffect(&currentWindows, &rect, atoi(args[0]));
+      //LuminositeEffect(&currentWindows, &rect, atoi(args[0]));
+    } 
   }else if(strcmp(name, ROTATION_LEFT) == 0){
     if ( busyWindows == 1){
       SDL_Rect rect;
       SDL_RenderGetViewport(currentWindows->renderer, &rect);
+      imageProcessing(&currentWindows->renderer, &rect, currentWindows->color, LEFT_ROTATION);
       imageProcessing(&currentWindows->renderer, &rect, currentWindows->color, LEFT_ROTATION);
     }
   }else if(strcmp(name, ROTATION_RIGHT) == 0){
     if ( busyWindows == 1){
       SDL_Rect rect;
       SDL_RenderGetViewport(currentWindows->renderer, &rect);
+      imageProcessing(&currentWindows->renderer, &rect, currentWindows->color, RIGHT_ROTATION);
       imageProcessing(&currentWindows->renderer, &rect, currentWindows->color, RIGHT_ROTATION);
     }
   }else{
