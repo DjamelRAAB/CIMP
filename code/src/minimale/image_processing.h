@@ -12,5 +12,7 @@ Uint8 fContrast(Uint8 c, double n);
 Uint32 flouPixel(Uint32 * pixels, SDL_Rect *rect ,int i, int j, int n);
 int imageProcessing (SDL_Renderer **renderer , SDL_Rect *rect , SDL_Color c , enum Processing act);
 int LuminositeEffect(dataWindows **w, SDL_Rect *rect, int n);
+int addContrastEffect(dataWindows **w, SDL_Rect *rect, int n);
+int subContrastEffect(dataWindows **w, SDL_Rect *rect, int n);
 
 #endif

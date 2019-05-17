@@ -4,7 +4,7 @@
 #define BUF_LENGTH 1024
 #define MAX_ARGS 10
 #define NAME_MAX 256
-#define DEF_INVITE "\033[01;32m /u @ /h : \033[01;34m /d \033[00m /$  >>> " //valeur par defaut de INVITE
+#define DEF_INVITE "CIMP : \033[01;34m /d \033[00m /$  >>> " //valeur par defaut de INVITE
 
 /* la structure d'une commande */
 typedef struct cmd{

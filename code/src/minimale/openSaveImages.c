@@ -18,13 +18,14 @@ int openImages(char *path[], int nbImages, windows **tetelisteWindows, int *posC
         dataWindows *w = initWindows(path[i]);
         SDL_Texture *textureImage = NULL;
         init(&w, W,H);
-        
+         
         SDL_SetWindowTitle(w->fenetre,w->path);
         textureImage = loadImage(w->path, (w->renderer), 1);
         if( textureImage == NULL){
             success = 0;
             goto erreur;
         }
+    
         SDL_RenderCopy(w->renderer, textureImage, NULL, NULL);
         SDL_RenderPresent(w->renderer);
         w->id = *posCurrent;
