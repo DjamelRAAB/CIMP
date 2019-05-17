@@ -20,9 +20,9 @@ int openImages(char *path[], int nbImages, windows **tetelisteWindows, int *posC
         init(&w, W,H);
          
         SDL_SetWindowTitle(w->fenetre,w->path);
-        textureImage = loadImage(w->path, (w->renderer), 1);
+        textureImage = loadImage(w->path, (w->renderer), 0);
         if( textureImage == NULL){
-            success = 0;
+            success = 0; 
             goto erreur;
         }
     

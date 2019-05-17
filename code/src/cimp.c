@@ -24,7 +24,7 @@ void AfficherAide();
 /*-------------------------------------------------*/
 
 /* -------------- Variables Globale -------------- */
-int nbCommands = 34;
+int nbCommands = 35;
 formatCmd commands[] = {
   {OPEN_IMAGES, MAX_ARGS, 1},
   {CLOSE_IMAGES, MAX_ARGS, 1},
@@ -32,6 +32,7 @@ formatCmd commands[] = {
   {AFFICHER_LIST_FENETRES, 0, 0 },
   {SAVE_IMAGES, 3, 1 },
   {LOAD_IMAGE, 2, 1 },
+  {CHANGE_COLOR,4, 1},
   {NEGATIVE_COLOR, 0, 0},
   {GREY_COLOR, 0, 0},
   {FLIPVERTICAL, 0, 0},
@@ -50,7 +51,7 @@ formatCmd commands[] = {
   {DELETEAREA,0,0},
   {COPIER,1,0},
   {COUPER,1,0},
-  {COLLER,1,1},
+  {COLLER,1,0},
   {SYMETRIQUE,0,1},  
   {RECADRAGE,0,1},
   {EDIT_SIZE_IMAGE,0,1},
@@ -66,7 +67,8 @@ windows *listeWindows = NULL;
 int posInTabFenetres = 0;
 dataWindows *currentWindows;
 int result = 0, busyWindows = 0;
-SDL_Rect zoneSelection;	
+SDL_Rect zoneSelection;
+SDL_Texture *zoneCopiage;
 /*-----------------------------------------------#define SUBCONTRAST "sub_contrast"
 --*/
 
@@ -165,7 +167,7 @@ void printInviteShell(char *curr_dir){
 short isCommand(char* text, int nbArgs){
   for(int i = 0;i < nbCommands;i++){
     if(strcmp(text, commands[i].name) == 0 && (nbArgs <= commands[i].nbArgs)){
-      if(nbArgs == 0 && commands[i].requiredArgs == 1)
+      if(nbArgs == 0 && commands[i].requiredArgs == 1) 
         return 0;
       else 
         return 1;
@@ -190,12 +192,11 @@ int execution(cmd* c){
   char** args = c->args;
   int nb_args = c->nb_args;
 
-  char *paths[] = { "assets/pictures/moto2.bmp"};
-
   /* ------- Chargement et sauvegarde d'images --------*/ 
   if(strcmp(name, OPEN_IMAGES) == 0){ // Ouverture de images 
-    if( openImages(paths, 1, &listeWindows, &posInTabFenetres) != 0) {
+    if( openImages(args, nb_args, &listeWindows, &posInTabFenetres) != 0) {
       currentWindows = listeWindows->data;
+      SDL_RenderGetViewport(currentWindows->renderer, &zoneSelection);
       //SDL_RaiseWindow(currentWindows->fenetre);
       busyWindows = 1;
     }
@@ -261,20 +262,22 @@ int execution(cmd* c){
   }
 
   /*------ Transformations ----- */
-  else if (strcmp(name, NEGATIVE_COLOR) == 0){ // Rendre une image négative
-    if ( busyWindows == 1){
-      SDL_Rect rect;
-      SDL_RenderGetViewport(currentWindows->renderer, &rect);
-      imageProcessing(&currentWindows->renderer, &rect, currentWindows->color, NEGATIVE);
-      imageProcessing(&currentWindows->renderer, &rect, currentWindows->color, NEGATIVE);
+  else if (strcmp(name, CHANGE_COLOR) == 0){ // Rendre une image négative
+    if ( nb_args == 4 && busyWindows == 1){
+      SDL_Color co = {atoi(c->args[0]), atoi(c->args[1]), atoi(c->args[2]), atoi(c->args[3])};
+      currentWindows->color = co;
     }
-
+    else
+      printf("---------------> Erreur !! \n");
+  }else if (strcmp(name, NEGATIVE_COLOR) == 0){ // Rendre une image négative
+    if ( busyWindows == 1){
+      imageProcessing(&currentWindows->renderer, &zoneSelection, currentWindows->color, NEGATIVE);
+      imageProcessing(&currentWindows->renderer, &zoneSelection, currentWindows->color, NEGATIVE);
+    }
   }else if (strcmp(name, GREY_COLOR) == 0 ){ // la mise en niveaux gris d'une image ou de la sélection courante
     if ( busyWindows == 1){
-      SDL_Rect rect;
-      SDL_RenderGetViewport(currentWindows->renderer, &rect);
-      imageProcessing(&currentWindows->renderer, &rect, currentWindows->color, GREY);
-      imageProcessing(&currentWindows->renderer, &rect, currentWindows->color, GREY);
+      imageProcessing(&currentWindows->renderer, &zoneSelection, currentWindows->color, GREY);
+      imageProcessing(&currentWindows->renderer, &zoneSelection, currentWindows->color, GREY);
     }
 
   }else if( strcmp(name, BLACK_WHITE_COLOR) == 0){ // la mise en noir et blanc d'une image ou de la sélection courante
@@ -284,86 +287,63 @@ int execution(cmd* c){
 
   }else if(strcmp(name, BRIGHTNESS_ADJUST) == 0){
     if ( busyWindows == 1){
-      SDL_Rect rect;
-      SDL_RenderGetViewport(currentWindows->renderer, &rect);
-      LuminositeEffect(&currentWindows, &rect, 5);
-      LuminositeEffect(&currentWindows, &rect, 5);
+      LuminositeEffect(&currentWindows, &zoneSelection, 5);
+      LuminositeEffect(&currentWindows, &zoneSelection, 5);
     } 
 
   }else if(strcmp(name, ADDCONTRAST) == 0){
     if ( busyWindows == 1){
-      SDL_Rect rect;
-      SDL_RenderGetViewport(currentWindows->renderer, &rect);
-      addContrastEffect(&currentWindows, &rect, 5);
-      addContrastEffect(&currentWindows, &rect, 5);
+      addContrastEffect(&currentWindows, &zoneSelection, 5);
+      addContrastEffect(&currentWindows, &zoneSelection, 5);
     }
   }else if(strcmp(name, FLIPVERTICAL) == 0){
     if ( busyWindows == 1){
-      SDL_Rect rect;
-      SDL_RenderGetViewport(currentWindows->renderer, &rect);
-      imageProcessing(&currentWindows->renderer, &rect, currentWindows->color, FLIP_VERTICAL);
-      imageProcessing(&currentWindows->renderer, &rect, currentWindows->color, FLIP_VERTICAL);
+      imageProcessing(&currentWindows->renderer, &zoneSelection, currentWindows->color, FLIP_VERTICAL);
+      imageProcessing(&currentWindows->renderer, &zoneSelection, currentWindows->color, FLIP_VERTICAL);
     }
   }else if(strcmp(name, BLURRED_EFFECT) == 0){
     if ( busyWindows == 1){
-      SDL_Rect rect;
-      SDL_RenderGetViewport(currentWindows->renderer, &rect);
-      imageProcessing(&currentWindows->renderer, &rect, currentWindows->color, BLURRED);
-      imageProcessing(&currentWindows->renderer, &rect, currentWindows->color,BLURRED);
+      imageProcessing(&currentWindows->renderer, &zoneSelection, currentWindows->color, BLURRED);
+      imageProcessing(&currentWindows->renderer, &zoneSelection, currentWindows->color,BLURRED);
     }
 
   }else if(strcmp(name, FLIPHORIZONTAL) == 0){
     if ( busyWindows == 1){
-      SDL_Rect rect;
-      SDL_RenderGetViewport(currentWindows->renderer, &rect);
-      imageProcessing(&currentWindows->renderer, &rect, currentWindows->color, FLIP_HORIZONTAL);
-      imageProcessing(&currentWindows->renderer, &rect, currentWindows->color, FLIP_HORIZONTAL);
+      imageProcessing(&currentWindows->renderer, &zoneSelection, currentWindows->color, FLIP_HORIZONTAL);
+      imageProcessing(&currentWindows->renderer, &zoneSelection, currentWindows->color, FLIP_HORIZONTAL);
     }
 
   }else if(strcmp(name, SUBCONTRAST) == 0){
     if ( busyWindows == 1){
-      SDL_Rect rect;
-      SDL_RenderGetViewport(currentWindows->renderer, &rect);
-      subContrastEffect(&currentWindows, &rect, 5);
-      subContrastEffect(&currentWindows, &rect, 5);
+      subContrastEffect(&currentWindows, &zoneSelection, 5);
+      subContrastEffect(&currentWindows, &zoneSelection, 5);
     }
   }else if(strcmp(name, CLIPPIN_EFFECT) == 0){
     if ( busyWindows == 1){
-      SDL_Rect rect;
-      SDL_RenderGetViewport(currentWindows->renderer, &rect);
-      imageProcessing(&currentWindows->renderer, &rect, currentWindows->color, CLIPPING);
-      imageProcessing(&currentWindows->renderer, &rect, currentWindows->color,CLIPPING);
+      imageProcessing(&currentWindows->renderer, &zoneSelection, currentWindows->color, CLIPPING);
+      imageProcessing(&currentWindows->renderer, &zoneSelection, currentWindows->color,CLIPPING);
     }
   }else if(strcmp(name, FILING_IMAGE) == 0){
     if ( busyWindows == 1){
-      SDL_Rect rect;
-      SDL_RenderGetViewport(currentWindows->renderer, &rect);
-      SDL_Color c = { 0, 0, 255, 255};
-      imageProcessing(&currentWindows->renderer, &rect, currentWindows->color, FILLING);
-      imageProcessing(&currentWindows->renderer, &rect, currentWindows->color,FILLING);
+      imageProcessing(&currentWindows->renderer, &zoneSelection, currentWindows->color, FILLING);
+      imageProcessing(&currentWindows->renderer, &zoneSelection, currentWindows->color,FILLING);
     }
   }else if(strcmp(name, ROTATION_LEFT) == 0){
     if ( busyWindows == 1){
-      SDL_Rect rect;
-      SDL_RenderGetViewport(currentWindows->renderer, &rect);
-      imageProcessing(&currentWindows->renderer, &rect, currentWindows->color, LEFT_ROTATION);
-      imageProcessing(&currentWindows->renderer, &rect, currentWindows->color, LEFT_ROTATION);
+      imageProcessing(&currentWindows->renderer, &zoneSelection, currentWindows->color, LEFT_ROTATION);
+      imageProcessing(&currentWindows->renderer, &zoneSelection, currentWindows->color, LEFT_ROTATION);
     }
 
   }else if(strcmp(name, ROTATION_RIGHT) == 0){
     if ( busyWindows == 1){
-      SDL_Rect rect;
-      SDL_RenderGetViewport(currentWindows->renderer, &rect);
-      imageProcessing(&currentWindows->renderer, &rect, currentWindows->color, RIGHT_ROTATION);
-      imageProcessing(&currentWindows->renderer, &rect, currentWindows->color, RIGHT_ROTATION);
+      imageProcessing(&currentWindows->renderer, &zoneSelection, currentWindows->color, RIGHT_ROTATION);
+      imageProcessing(&currentWindows->renderer, &zoneSelection, currentWindows->color, RIGHT_ROTATION);
     }
   
   /*------ Sélection ------- */
   }else if(strcmp(name, SELECTAREA) == 0){
     if ( busyWindows == 1){
-      SDL_Rect rect;
-      SDL_RenderGetViewport(currentWindows->renderer, &rect);
-      selectRect(currentWindows->renderer);
+      zoneSelection = selectRect(currentWindows->renderer);
     }
 
   }else if(strcmp(name, DELIMITAREA) == 0){
@@ -374,16 +354,16 @@ int execution(cmd* c){
   /*------ Copier, Couper, Coller ------- */
   }else if(strcmp(name, COPIER) == 0){
     if ( busyWindows == 1){
-      printf("-----------> copier \n");
+      zoneCopiage = copier(currentWindows->renderer, &zoneSelection);
     }
 
   }else if(strcmp(name, COUPER) == 0){
     if ( busyWindows == 1){
-      printf("-----------> couper \n");
+      zoneCopiage = couper(currentWindows->renderer, &zoneSelection, currentWindows->color);
     }
   }else if(strcmp(name, COLLER) == 0){
     if ( busyWindows == 1){
-      printf("-----------> coller \n");
+      coller(currentWindows->renderer, &zoneSelection, zoneCopiage);
     }
   /* --------- Erreur --------- */
   }else if(strcmp(name, "help") == 0){
@@ -406,17 +386,21 @@ void AfficherAide(){
   printf("\033[01;34m basculer\033[00m : cette fonctionalité permet de basculer entre les fenetre autrement dit passer d'une fenetre à une autre\n"); 
   printf("\033[01;34m liste   \033[00m : Afficher la liste des fenetres ouvertes\n"); 
   printf("\033[01;34m save    \033[00m : Sauvegarder une image\n");
-  printf("loadImage : Télécharger une image\n"); 
-  printf("selectArea : Selectionner une zone d'une image\n");
-  printf("delimitArea : Delimiter une zone avec des pointiers\n");
-  printf("deselectArea : Deselectionner une zone déjà selectionnée\n");
-  printf("editPixelImage:                               \n");
-  printf("addArea : Ajouter une zone à une image déjà existante\n");
-  printf("deleteArea : Supprimer une zone d'une image existante\n");
-  printf ("copier : Copier une région d'image \n"); 
-  printf("couper : Couper une région d'image en remplaçant la zone selectionnée par une couleur de fond\n");
-  printf("coller : Coller la zone copiée ou coupée dans n'importe quelle coordonnées de cette image ou d'une autre image\n");
-  printf("symetrie : Effectuer sur une image les transformations de symétries verticale et horizontale \n");  
-  printf("recadrage : Recadrage de l’image par découpage rectangulaire et par agrandissement de la zone de travail \n"); 
-  printf("filling : Permet le remplissage par une couleur donnée qui s'appliqueront à une image ou à la sélection courante \n");
+  printf("\033[01;34m load    \033[00m : Télécharger une image\n"); 
+  printf("\033[01;34m select  \033[00m : Selectionner une zone d'une image\n");
+  printf("\033[01;34m delimit \033[00m : Delimiter une zone avec des pointiers\n");
+  printf("\033[01;34m deselect\033[00m : Deselectionner une zone déjà selectionnée\n");
+  printf("\033[01;34m add_select\033[00m : Ajouter une zone à une image déjà existante\n");
+  printf("\033[01;34m del_select\033[00m : Supprimer une zone d'une image existante\n");
+  printf("\033[01;34m copier  \033[00m : Copier une région d'image \n"); 
+  printf("\033[01;34m couper  \033[00m : Couper une région d'image en remplaçant la zone selectionnée par une couleur de fond\n");
+  printf("\033[01;34m coller  \033[00m : Coller la zone copiée ou coupée dans n'importe quelle coordonnées de cette image ou d'une autre image\n");
+  printf("\033[01;34m rotleft \033[00m : Rotation gauche \n");
+  printf("\033[01;34m rotright\033[00m : Rotation droite une zone déjà selectionnée\n");
+  printf("\033[01;34m neg     \033[00m : l'effet négative \n");
+  printf("\033[01;34m lum     \033[00m : luminosité\n");
+  printf("\033[01;34m chanage_color \033[00m : changer la couleur\n");
+  printf("\033[01;34m add/sub_contarst \033[00m : Contrast\n");
+  printf("\033[01;34m clipping\033[00m : Recadrage de l’image par découpage rectangulaire et par agrandissement de la zone de travail \n"); 
+  printf("\033[01;34m filling \033[00m : Permet le remplissage par une couleur donnée qui s'appliqueront à une image ou à la sélection courante \n");
 }

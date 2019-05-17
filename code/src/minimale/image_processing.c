@@ -66,7 +66,7 @@ Uint32 flouPixel(Uint32 * pixels, SDL_Rect *rect ,int i, int j, int n){
  * @return retourne 0 si tout c'est bien passer 1 si non. 
  **/
 int imageProcessing (SDL_Renderer **renderer, SDL_Rect *rect , SDL_Color c , enum Processing act){  
-  int i , j ,n = 2;
+  int i =0 , j = 0 ,n = 2;
   int pitch ;
   double angle ;
   SDL_RendererFlip flip ;
@@ -74,7 +74,7 @@ int imageProcessing (SDL_Renderer **renderer, SDL_Rect *rect , SDL_Color c , enu
   Uint32 *pixels2; 
   SDL_Texture *texture ; 
   SDL_PixelFormat *format;
-  SDL_Color tmp ;
+  SDL_Color tmp = {0, 0, 0, 0};
 
   pitch = sizeof(Uint32) * rect->w ;
 

@@ -8,7 +8,7 @@
  * @param  Deux pointeur (1er -> *window, 2ème -> *renduerer) 
  * @param  w : la largeur, h : la hauteur 
  * @return return 0 si tout se passe bien -1 si non
- **/
+ **/ 
 int init(dataWindows **windows, int w, int h){
   (*windows)->fenetre = SDL_CreateWindow("image", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, w, h, SDL_WINDOW_BORDERLESS|SDL_WINDOW_MINIMIZED);
   if( (*windows)->fenetre == NULL ){

@@ -7,7 +7,7 @@
 #define __DEFAULTVALUES__H__
 
 /* --------------- Définitions des colors ---------------- */
-#define vert {0, 7, 227}
+#define vert {0, 7, 227, 255}
 
 /*-------------------Noms de commmandes --------------------*/
 #define OPEN_IMAGES "open"
@@ -16,6 +16,8 @@
 #define AFFICHER_LIST_FENETRES "liste"
 #define SAVE_IMAGES "save"
 #define LOAD_IMAGE "load"
+
+#define CHANGE_COLOR "change_color"
 
 #define SELECTAREA "select"
 #define DELIMITAREA "delimit"

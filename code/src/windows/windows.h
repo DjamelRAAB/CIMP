@@ -4,8 +4,8 @@
 #ifndef __WINDOWS__H__
 #define __WINDOWS__H__
 
-#define H 700
-#define W 820
+#define H 750
+#define W 800
 
 #define MAX_WINDOWS 5
 #define MAX_PATH 256

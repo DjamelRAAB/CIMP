@@ -12,8 +12,8 @@
  * @param rederer : la composante rendu sur la quelle faire la selection
  * @return pixels : une matrice de pixels qui représente le rectangle sélectionner
  **/
-int getPixels(SDL_Renderer *renderer , SDL_Rect *rect , Uint32 * pixels){
-  if (SDL_RenderReadPixels(renderer, rect, SDL_PIXELFORMAT_RGBA8888, pixels, sizeof(Uint32)* rect->w)){
+int getPixels(SDL_Renderer *renderer , SDL_Rect *rect , Uint32 *pixels){
+  if (SDL_RenderReadPixels(renderer, NULL, SDL_PIXELFORMAT_RGBA8888, pixels, sizeof(Uint32)* rect->w)){
     fprintf(stderr, "Erreur  in select :  SDL_RenderReadPixels: %s", SDL_GetError());
     return -1;
   }
@@ -26,6 +26,7 @@ int getPixels(SDL_Renderer *renderer , SDL_Rect *rect , Uint32 * pixels){
  * @return rect : le rectangle sélectionner.
  **/
 SDL_Rect selectRect (SDL_Renderer *renderer){
+  
   SDL_Event *e =malloc (sizeof(SDL_Event));
   int b=0 ,down = 0 ,pitch;
   SDL_Point src ,dst;
@@ -39,27 +40,30 @@ SDL_Rect selectRect (SDL_Renderer *renderer){
   if(pixels == NULL){
     return tmp;
   }
-  texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_STATIC, tmp.w, tmp.h );
+  texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, tmp.w, tmp.h );
   if(texture == NULL){
     free(pixels);
     return tmp;
   }
+
   getPixels(renderer , &tmp ,pixels);
   SDL_UpdateTexture(texture, NULL, pixels, sizeof(Uint32) * tmp.w);
   SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+  
   while(b == 0){
     if(SDL_PollEvent(e)){
     switch(e->type){
         case SDL_MOUSEBUTTONDOWN :
           if(e->button.button==SDL_BUTTON_LEFT) {
-          src.x = e->button.x, 
-          src.y = e->button.y;
+            src.x = e->button.x;
+            src.y = e->button.y;
           }      
           down=1;
           break;
+
         case SDL_MOUSEMOTION :
           if(down==1){
-            dst.x = e->button.x, 
+            dst.x = e->button.x;
             dst.y = e->button.y;    
             if(src.x<dst.x)
               rect.x=src.x;
@@ -69,31 +73,34 @@ SDL_Rect selectRect (SDL_Renderer *renderer){
               rect.y=src.y;
             else
               rect.y=dst.y;
-          rect.h = abs(src.y - dst.y);
-          rect.w = abs(src.x - dst.x);
-          SDL_RenderCopy(renderer, texture, NULL, NULL);
-          SDL_RenderDrawRect(renderer, &rect); 
-          //SDL_RenderCopy(renderer, texture, &rect, NULL);          
-          SDL_RenderPresent(renderer);
+
+            rect.h = abs(src.y - dst.y);
+            rect.w = abs(src.x - dst.x);
+            SDL_RenderCopy(renderer, texture, NULL, NULL);
+            SDL_RenderDrawRect(renderer, &rect);      
+            SDL_RenderPresent(renderer);
           }
           break;
+
         case SDL_MOUSEBUTTONUP :
           down =0;
-          if(e->button.button==SDL_BUTTON_LEFT) {
-            dst.x = e->button.x, 
+          if(e->button.button==SDL_BUTTON_LEFT){
+            dst.x = e->button.x;
             dst.y = e->button.y;  
             rect.h = abs(src.y - dst.y);
-          rect.w = abs(src.x - dst.x);
+            rect.w = abs(src.x - dst.x);
           }
-        b=1;
+          b=1;
         break;
+
         case SDL_QUIT : 
           goto Quit;
           break;
       }
     }
   }
-  Quit :
+
+Quit :
   SDL_RenderCopy(renderer, texture, NULL, NULL);
   SDL_DestroyTexture(texture);
   free(pixels);
