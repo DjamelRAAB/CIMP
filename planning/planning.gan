@@ -37,7 +37,11 @@
             <taskproperty id="tpd8" name="coordinator" type="default" valuetype="text"/>
             <taskproperty id="tpd9" name="predecessorsr" type="default" valuetype="text"/>
         </taskproperties>
-        <task id="4" name="spécifications fonctionnelles" color="#8cb6ce" meeting="false" start="2019-02-15" duration="5" complete="0" thirdDate="2019-01-18" thirdDate-constraint="0" expand="true">
+        <task id="14" name="Appentissage de SDL2.0" color="#8cb6ce" meeting="false" start="2019-02-01" duration="45" complete="0" thirdDate="2019-02-19" thirdDate-constraint="0" expand="true"/>
+        <task id="9" name="Création des branches" color="#ff3300" shape="0,1,1,0,1,1,1,1,1,1,1,1,0,1,1,0" meeting="false" start="2019-02-04" duration="2" complete="0" thirdDate="2019-02-19" thirdDate-constraint="0" priority="4" expand="true">
+            <notes><![CDATA[Création des branches sur GitLab]]></notes>
+        </task>
+        <task id="4" name="spécifications fonctionnelles" color="#8cb6ce" meeting="false" start="2019-02-06" duration="3" complete="0" thirdDate="2019-01-18" thirdDate-constraint="0" expand="true">
             <notes><![CDATA[* Spécifications Générales: - HADJEBAR Rabah
 	                     - MOUSSI Ines
 * HADJEBAR :  - Chargement et sauvegarde d’images
@@ -47,23 +51,37 @@
 
 * Extentions possible: RAAB- HADJEBAR - MOUSSI]]></notes>
         </task>
-        <task id="6" name="spécifications techniques" color="#8cb6ce" meeting="false" start="2019-02-15" duration="5" complete="0" thirdDate="2019-02-19" thirdDate-constraint="0" expand="true">
+        <task id="6" name="spécifications techniques" color="#8cb6ce" meeting="false" start="2019-02-11" duration="4" complete="0" thirdDate="2019-02-19" thirdDate-constraint="0" expand="true">
             <notes><![CDATA[Spécifications téchniques de tous le projet
 ]]></notes>
         </task>
-        <task id="9" name="Création des branches" color="#ff3300" shape="0,1,1,0,1,1,1,1,1,1,1,1,0,1,1,0" meeting="false" start="2019-02-15" duration="3" complete="0" thirdDate="2019-02-19" thirdDate-constraint="0" priority="4" expand="true">
-            <notes><![CDATA[Création des branches sur GitLab]]></notes>
-        </task>
-        <task id="14" name="Appentissage de SDL2.0" color="#8cb6ce" meeting="false" start="2019-02-01" duration="45" complete="0" thirdDate="2019-02-19" thirdDate-constraint="0" expand="true"/>
-        <task id="22" name="Réalisation du CLI" color="#990000" meeting="false" start="2019-04-01" duration="14" complete="0" thirdDate="2019-02-14" thirdDate-constraint="0" expand="true"/>
-        <task id="15" name="Définition du CLI" color="#cc3300" meeting="false" start="2019-02-22" duration="1" complete="0" thirdDate="2019-02-19" thirdDate-constraint="0" priority="2" expand="true">
+        <task id="15" name="Définition du CLI" color="#cc3300" meeting="false" start="2019-02-14" duration="2" complete="0" thirdDate="2019-02-19" thirdDate-constraint="0" priority="2" expand="true">
             <notes><![CDATA[Définition d'une gramamaire d'interprétation pour les commandes]]></notes>
         </task>
-        <task id="17" name="Prise en main de SDL2.0" color="#990033" meeting="false" start="2019-02-22" duration="6" complete="0" thirdDate="2019-02-19" thirdDate-constraint="0" priority="4" expand="true">
+        <task id="17" name="Prise en main de SDL2.0" color="#990033" meeting="false" start="2019-02-18" duration="22" complete="0" thirdDate="2019-02-19" thirdDate-constraint="0" priority="4" expand="true">
             <notes><![CDATA[Familiarisation avec la librairie SDL2.0   ]]></notes>
         </task>
-        <task id="21" name="Organisation du projet en modules" color="#3300cc" meeting="false" start="2019-02-26" duration="4" complete="0" thirdDate="2019-02-19" thirdDate-constraint="0" expand="true"/>
-        <task id="26" name="Réalisation des fonctionnalités minimales" color="#006666" meeting="false" start="2019-03-04" duration="30" complete="0" thirdDate="2019-02-18" thirdDate-constraint="0" priority="2" expand="true"/>
+        <task id="21" name="Organisation du projet en modules" color="#3300cc" meeting="false" start="2019-02-21" duration="3" complete="0" thirdDate="2019-02-19" thirdDate-constraint="0" expand="true"/>
+        <task id="28" name="Mise en place de la structure du code" color="#8cb6ce" meeting="false" start="2019-03-04" duration="5" complete="0" thirdDate="2019-03-14" thirdDate-constraint="0" expand="true"/>
+        <task id="22" name="Réalisation du CLI" color="#990000" meeting="false" start="2019-03-08" duration="24" complete="0" thirdDate="2019-02-14" thirdDate-constraint="0" expand="true"/>
+        <task id="26" name="Réalisation des fonctionnalités minimales" color="#006666" meeting="false" start="2019-03-27" duration="25" complete="0" thirdDate="2019-02-18" thirdDate-constraint="0" priority="2" expand="true"/>
+        <task id="44" name="Ajout des spécifications d'extentions" color="#8cb6ce" meeting="false" start="2019-03-14" duration="2" complete="0" thirdDate="2019-03-14" thirdDate-constraint="0" expand="true"/>
+        <task id="45" name="création de la première fenetre avec la première image" color="#8cb6ce" meeting="false" start="2019-03-18" duration="4" complete="0" thirdDate="2019-03-14" thirdDate-constraint="0" expand="true"/>
+        <task id="48" name="Mise à jour de la fonction loadImage" color="#8cb6ce" meeting="false" start="2019-03-21" duration="2" complete="0" thirdDate="2019-03-14" thirdDate-constraint="0" expand="true"/>
+        <task id="50" name="Ajout de la fonction save Image" color="#8cb6ce" meeting="false" start="2019-03-25" duration="1" complete="0" thirdDate="2019-03-14" thirdDate-constraint="0" expand="true"/>
+        <task id="51" name="Création du fichier Image_processing" color="#8cb6ce" meeting="false" start="2019-03-27" duration="2" complete="0" thirdDate="2019-03-14" thirdDate-constraint="0" expand="true"/>
+        <task id="52" name="Mise à jour de la documentation" color="#8cb6ce" meeting="false" start="2019-03-29" duration="1" complete="0" thirdDate="2019-03-14" thirdDate-constraint="0" expand="true">
+            <notes><![CDATA[l'ajout des modules ]]></notes>
+        </task>
+        <task id="53" name="Mise à jour de la structure générale du code" color="#8cb6ce" meeting="false" start="2019-04-01" duration="2" complete="0" thirdDate="2019-03-14" thirdDate-constraint="0" expand="true"/>
+        <task id="54" name="Mise du répertoire" color="#8cb6ce" meeting="false" start="2019-04-02" duration="4" complete="0" thirdDate="2019-03-14" thirdDate-constraint="0" expand="true"/>
+        <task id="55" name="Réalisation du CLI" color="#8cb6ce" meeting="false" start="2019-04-08" duration="1" complete="0" thirdDate="2019-03-14" thirdDate-constraint="0" expand="true"/>
+        <task id="65" name="Fonctionnalités de base du CLI" color="#8cb6ce" meeting="false" start="2019-04-08" duration="5" complete="0" thirdDate="2019-03-14" thirdDate-constraint="0" expand="true"/>
+        <task id="66" name="Réctification de quelques fonctionnalités" color="#8cb6ce" meeting="false" start="2019-04-15" duration="1" complete="0" thirdDate="2019-03-14" thirdDate-constraint="0" expand="true"/>
+        <task id="69" name="update du makefile" color="#8cb6ce" meeting="false" start="2019-04-16" duration="2" complete="0" thirdDate="2019-03-14" thirdDate-constraint="0" expand="true"/>
+        <task id="70" name="AJout de l'option ADD_FRAMING" color="#8cb6ce" meeting="false" start="2019-04-18" duration="3" complete="0" thirdDate="2019-03-14" thirdDate-constraint="0" expand="true"/>
+        <task id="71" name="tâche_71" meeting="false" start="2019-03-14" duration="1" complete="0" expand="true"/>
+        <task id="72" name="tâche_72" meeting="false" start="2019-03-14" duration="1" complete="0" expand="true"/>
     </tasks>
     <resources>
         <resource id="0" name="HADJEBAR" function="Default:0" contacts="" phone=""/>
