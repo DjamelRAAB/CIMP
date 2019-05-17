@@ -52,6 +52,7 @@ formatCmd commands[] = {
   {EDIT_SIZE_IMAGE, ,1},
   {FILLING_IMAGE, ,1},
   {TREAT_EXTERN_FILE_IMAGE, ,1},
+  {"help",0,0}
   {} 
 
 
@@ -275,6 +276,10 @@ int execution(cmd* c){
       SDL_RenderGetViewport(currentWindows->renderer, &rect);
       imageProcessing(&currentWindows->renderer, &rect, currentWindows->color, RIGHT_ROTATION);
     }
+  else if(strcmp(name, help) == 0){
+     if ( busyWindows == 1){
+       AfficherAide();
+     }
   }else{
     perror("-mpsh: no such intern command");
     return 1; 
@@ -291,7 +296,18 @@ void AfficherAide(){
  printf("afficherListFenetres : cette commande permet d'afficher la liste des fenetres ouvertes\n"); 
  printf("saveImage : cette commande permet de sauvegarder une image\n");
  printf("loadImage : cette commande permet de télécharger une image\n"); 
- printf("selectArea \n")
+ printf("selectArea : cette commande permet de selectionner une zone d'une image\n");
+ printf("delimitArea : cette commande permet de delimiter une zone avec des pointiers\n");
+ printf("deselectArea : cette commande permet de deselectionner une zone déjà selectionnée\n");
+ printf("editPixelImage:                               \n");
+ printf("addArea : cette commande permet d'ajouter une zone à une image déjà existante\n");
+ printf("deleteArea : cette commande permet de supprimer une zone d'une image existante\n");
+ printf ("copier : cette commande permet de copier une région d'image \n"); 
+ printf("couper : cette commande permet de couper une région d'image en remplaçant la zone selectionnée par une couleur de fond\n");
+ printf("coller : cette commande permet de coller la zone copiée ou coupée dans n'importe quelle coordonnées de cette image ou d'une autre image\n");
+ printf("symetrie : cette commande permet d'effectuer sur une image les transformations de symétries verticale et horizontale \n");  
+ printf("recadrage : cette commande recadrage de l’image par découpage rectangulaire et par agrandissement de la zone de travail \n"); 
+ printf("filling : cette commande  permet le remplissage par une couleur donnée qui s'appliqueront à une image ou à la sélection courante \n");
 }
 
 
