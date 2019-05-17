@@ -180,7 +180,7 @@ int imageProcessing (SDL_Renderer **renderer, SDL_Rect *rect , SDL_Color c , enu
     for(i = 0; i < rect->h; i++){
       for(j = 0; j < rect->w; j++){
         if(i==0||i==rect->h-1||j==0||j==rect->w-1){
-      //	  SDL_GetRGBA(pixels[i * rect->w + j], format, &tmp.r, &tmp.g, &tmp.b , &tmp.a );
+          //SDL_GetRGBA(pixels[i * rect->w + j], format, &tmp.r, &tmp.g, &tmp.b , &tmp.a );
           pixels2[i * rect->w + j] = 255 - SDL_abs(pixels[i * rect->w + j] - flouPixel(pixels,rect,i,j,n));
         }
       }

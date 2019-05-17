@@ -42,6 +42,8 @@
 #define BRIGHTNESS_ADJUST "lum"
 #define TREAT_EXTERN_FILE_IMAGE "treat"
 #define ADDCONTRAST "add_contrast"
+#define BLURRED_EFFECT "flou"
 #define SUBCONTRAST "sub_contrast"
+#define CLIPPIN_EFFECT "clipping"
 
 #endif

@@ -9,7 +9,7 @@
 **/
 
 dataWindows *initWindows(const char path[]){
-    SDL_Color defaultColor = {0,0,0,0}; 
+    SDL_Color defaultColor = {0,0,0,255}; 
     SDL_Window *f = NULL;
     SDL_Renderer *r = NULL;
 

@@ -24,7 +24,7 @@ void AfficherAide();
 /*-------------------------------------------------*/
 
 /* -------------- Variables Globale -------------- */
-int nbCommands = 32;
+int nbCommands = 34;
 formatCmd commands[] = {
   {OPEN_IMAGES, MAX_ARGS, 1},
   {CLOSE_IMAGES, MAX_ARGS, 1},
@@ -54,8 +54,10 @@ formatCmd commands[] = {
   {SYMETRIQUE,0,1},  
   {RECADRAGE,0,1},
   {EDIT_SIZE_IMAGE,0,1},
-  {FILING_IMAGE,0,1},
+  {FILING_IMAGE,0,0},
   {TREAT_EXTERN_FILE_IMAGE,0,1},
+  {BLURRED_EFFECT,0,0},
+  {CLIPPIN_EFFECT,0,0},
   {"help",0,0}
 };
 
@@ -188,7 +190,7 @@ int execution(cmd* c){
   char** args = c->args;
   int nb_args = c->nb_args;
 
-  char *paths[] = { "assets/pictures/moto.bmp"};
+  char *paths[] = { "assets/pictures/moto2.bmp"};
 
   /* ------- Chargement et sauvegarde d'images --------*/ 
   if(strcmp(name, OPEN_IMAGES) == 0){ // Ouverture de images 
@@ -302,6 +304,13 @@ int execution(cmd* c){
       imageProcessing(&currentWindows->renderer, &rect, currentWindows->color, FLIP_VERTICAL);
       imageProcessing(&currentWindows->renderer, &rect, currentWindows->color, FLIP_VERTICAL);
     }
+  }else if(strcmp(name, BLURRED_EFFECT) == 0){
+    if ( busyWindows == 1){
+      SDL_Rect rect;
+      SDL_RenderGetViewport(currentWindows->renderer, &rect);
+      imageProcessing(&currentWindows->renderer, &rect, currentWindows->color, BLURRED);
+      imageProcessing(&currentWindows->renderer, &rect, currentWindows->color,BLURRED);
+    }
 
   }else if(strcmp(name, FLIPHORIZONTAL) == 0){
     if ( busyWindows == 1){
@@ -317,6 +326,21 @@ int execution(cmd* c){
       SDL_RenderGetViewport(currentWindows->renderer, &rect);
       subContrastEffect(&currentWindows, &rect, 5);
       subContrastEffect(&currentWindows, &rect, 5);
+    }
+  }else if(strcmp(name, CLIPPIN_EFFECT) == 0){
+    if ( busyWindows == 1){
+      SDL_Rect rect;
+      SDL_RenderGetViewport(currentWindows->renderer, &rect);
+      imageProcessing(&currentWindows->renderer, &rect, currentWindows->color, CLIPPING);
+      imageProcessing(&currentWindows->renderer, &rect, currentWindows->color,CLIPPING);
+    }
+  }else if(strcmp(name, FILING_IMAGE) == 0){
+    if ( busyWindows == 1){
+      SDL_Rect rect;
+      SDL_RenderGetViewport(currentWindows->renderer, &rect);
+      SDL_Color c = { 0, 0, 255, 255};
+      imageProcessing(&currentWindows->renderer, &rect, currentWindows->color, FILLING);
+      imageProcessing(&currentWindows->renderer, &rect, currentWindows->color,FILLING);
     }
   }else if(strcmp(name, ROTATION_LEFT) == 0){
     if ( busyWindows == 1){
