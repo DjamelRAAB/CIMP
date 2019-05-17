@@ -12,8 +12,8 @@
  * @param rederer : la composante rendu sur la quelle faire la selection
  * @return pixels : une matrice de pixels qui représente le rectangle sélectionner
  **/
-int getPixels(SDL_Renderer *renderer , SDL_Rect *rect , Uint32 *pixels){
-  if (SDL_RenderReadPixels(renderer, NULL, SDL_PIXELFORMAT_RGBA8888, pixels, sizeof(Uint32)* rect->w)){
+int getPixels(SDL_Renderer *renderer , SDL_Rect *rect , Uint32 * pixels){
+  if (SDL_RenderReadPixels(renderer, rect, SDL_PIXELFORMAT_RGBA8888, pixels, sizeof(Uint32)* rect->w)){
     fprintf(stderr, "Erreur  in select :  SDL_RenderReadPixels: %s", SDL_GetError());
     return -1;
   }
